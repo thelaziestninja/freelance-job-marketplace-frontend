@@ -1,9 +1,29 @@
 import axios, { AxiosResponse } from "axios";
-import { UserI, ProfileI, JobI, ApplicationI, ReviewI } from "../utils/types";
+import {
+  UserI,
+  ProfileI,
+  JobI,
+  ApplicationI,
+  ReviewI,
+  JobsResponse,
+} from "../utils/types";
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
 });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("token");
+    if (token && config.url && config.url.includes("/protected-route")) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Users API
 export const getUsers = (): Promise<AxiosResponse<UserI[]>> => {
@@ -16,8 +36,9 @@ export const getProfiles = (): Promise<AxiosResponse<ProfileI[]>> => {
 };
 
 // Jobs API
-export const getJobs = (): Promise<AxiosResponse<JobI[]>> => {
-  return api.get<JobI[]>("/jobs");
+export const getJobs = async (): Promise<JobsResponse> => {
+  const response = await api.get<JobI[]>("/jobs");
+  return { data: { jobs: response.data } };
 };
 
 // Applications API

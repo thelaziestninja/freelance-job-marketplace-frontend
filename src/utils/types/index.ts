@@ -2,14 +2,14 @@ export type UserType = "freelancer" | "client";
 
 export interface UserI {
   //excluded the hashed password for security reasons
-  id: string;
+  _id: string;
   username: string;
   email: string;
   user_type: UserType;
 }
 
 export interface ProfileI {
-  id: string;
+  _id: string;
   user: string;
   skills: string[];
   description: string;
@@ -18,7 +18,7 @@ export interface ProfileI {
 }
 
 export interface JobI {
-  id: string;
+  _id: string;
   client_id: string;
   title: string;
   description: string;
@@ -26,8 +26,14 @@ export interface JobI {
   deadline: Date;
 }
 
+export interface JobsResponse {
+  data: {
+    jobs: JobI[];
+  };
+}
+
 export interface ApplicationI {
-  id: string;
+  _id: string;
   job_id: string;
   freelancer_id: string;
   cover_letter: string;
@@ -35,7 +41,7 @@ export interface ApplicationI {
 }
 
 export interface ReviewI {
-  id: string;
+  _id: string;
   freelancer_id: string;
   client_id: string;
   rating: number;
