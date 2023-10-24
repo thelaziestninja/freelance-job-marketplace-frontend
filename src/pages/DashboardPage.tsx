@@ -1,23 +1,22 @@
 import React from "react";
 import JobList from "../components/job/JobList";
-import { useAuth } from "../auth/auth";
+import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../hooks/useProfiles";
 import Profile from "../components/profiles/Profile";
 import { ProfileI } from "../utils/types";
 
 const DashboardPage: React.FC = () => {
-  const { logout } = useAuth();
   const { data: profiles } = useProfiles();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      sessionStorage.removeItem("token");
       await logout();
       navigate("/");
     } catch (error) {
       console.error("Logout error", error);
+      // Display error to user (see below for method)
     }
   };
   console.log("Profiles:", profiles);

@@ -8,22 +8,25 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import ApplicationPage from "./pages/ApplicationPage";
 import { AuthProvider } from "./auth/AuthContext";
+import { NotificationProvider } from "./context/NotificationProvider";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        {/* <Header /> */}
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/applications" element={<ApplicationPage />} />
-        </Routes>
-        {/* <Footer /> */}
-      </Router>
+      <NotificationProvider>
+        <Router>
+          {/* <Header /> */}
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/applications" element={<ApplicationPage />} />
+          </Routes>
+          {/* <Footer /> */}
+        </Router>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

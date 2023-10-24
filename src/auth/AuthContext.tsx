@@ -16,9 +16,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(
-    sessionStorage.getItem("token")
-  );
+  const [token, setToken] = useState<string | null>(AuthService.getToken());
 
   const login = async (username: string, password: string) => {
     const token = await AuthService.login(username, password);
@@ -28,7 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     if (token) {
-      await AuthService.logout(token);
+      await AuthService.logout();
       sessionStorage.removeItem("token");
       setToken(null);
     }
