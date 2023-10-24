@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/tailwind.css";
 import { Link } from "react-router-dom";
 import businessPepe from "../assets/businesspepe.png";
@@ -9,9 +9,11 @@ const HomePage: React.FC = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
 
-  if (token) {
-    navigate("/dashboard");
-  }
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col justify-center items-center pt-32 relative">
