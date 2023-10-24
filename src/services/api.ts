@@ -15,7 +15,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("token");
-    if (token && config.url && config.url.includes("/protected-route")) {
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -37,8 +37,8 @@ export const getProfiles = (): Promise<AxiosResponse<ProfileI[]>> => {
 
 // Jobs API
 export const getJobs = async (): Promise<JobsResponse> => {
-  const response = await api.get<JobI[]>("/jobs");
-  return { data: { jobs: response.data } };
+  const response = await api.get<{ jobs: JobI[] }>("/jobs");
+  return { jobs: response.data };
 };
 
 // Applications API

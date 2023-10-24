@@ -27,7 +27,7 @@ export interface JobI {
 }
 
 export interface JobsResponse {
-  data: {
+  jobs: {
     jobs: JobI[];
   };
 }

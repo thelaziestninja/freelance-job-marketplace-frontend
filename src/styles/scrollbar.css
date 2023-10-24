@@ -1,0 +1,19 @@
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track (background) of the scrollbar */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle (thumb) of the scrollbar */
+  ::-webkit-scrollbar-thumb {
+    background: #D07E7E;
+  }
+  
+  /* On hover, the handle (thumb) will have a lighter background */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c3598e;
+  }
