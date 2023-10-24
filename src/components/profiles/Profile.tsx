@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileI } from "../../utils/types";
+import { ProfileI } from "../../types";
 
 interface ProfileProps {
   profile: ProfileI;

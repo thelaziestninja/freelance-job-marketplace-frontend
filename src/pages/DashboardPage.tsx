@@ -4,7 +4,7 @@ import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../hooks/useProfiles";
 import Profile from "../components/profiles/Profile";
-import { ProfileI } from "../utils/types";
+import { ProfileI } from "../types";
 
 const DashboardPage: React.FC = () => {
   const { data: profiles } = useProfiles();

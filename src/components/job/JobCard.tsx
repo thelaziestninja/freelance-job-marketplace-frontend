@@ -1,5 +1,5 @@
 import React from "react";
-import { JobI } from "../../utils/types";
+import { JobI } from "../../types";
 
 const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
   return (

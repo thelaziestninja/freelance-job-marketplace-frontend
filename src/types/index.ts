@@ -8,6 +8,18 @@ export interface UserI {
   user_type: UserType;
 }
 
+export enum USER_TYPE {
+  CLIENT = "client",
+  FREELANCER = "freelancer",
+}
+
+export interface RegisterUserDataI {
+  username: string;
+  email: string;
+  password: string;
+  user_type: UserType;
+}
+
 export interface ProfileI {
   _id: string;
   user: string;

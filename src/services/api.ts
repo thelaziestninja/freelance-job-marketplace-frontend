@@ -6,7 +6,8 @@ import {
   ApplicationI,
   ReviewI,
   JobsResponse,
-} from "../utils/types";
+  RegisterUserDataI,
+} from "../types";
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
@@ -28,6 +29,11 @@ api.interceptors.request.use(
 // Users API
 export const getUsers = (): Promise<AxiosResponse<UserI[]>> => {
   return api.get<UserI[]>("/users");
+};
+
+export const registerUser = async (userData: RegisterUserDataI) => {
+  const response = await api.post("/user/register", userData);
+  return response.data;
 };
 
 // Profiles API
