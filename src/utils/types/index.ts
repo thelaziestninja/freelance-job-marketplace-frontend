@@ -15,6 +15,7 @@ export interface ProfileI {
   description: string;
   hourly_rate: number;
   languages?: string[];
+  imageUrl?: string;
 }
 
 export interface JobI {
