@@ -7,7 +7,6 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ profile, imageUrl }) => {
-  // Define the URL of the online placeholder image
   const placeholderImageUrl =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU";
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../auth/authService";
+import businessPepe from "../assets/businesspepe.png";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -79,6 +80,12 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Pepe Image */}
+      <img
+        src={businessPepe}
+        alt="Business Pepe"
+        className="absolute left-0 bottom-0 h-500 w-auto md:h-500 md:w-auto"
+      />
     </div>
   );
 };

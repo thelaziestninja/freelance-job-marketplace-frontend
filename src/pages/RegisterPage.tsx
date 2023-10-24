@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import businessPepe from "../assets/businesspepe.png";
 
 const RegisterPage: React.FC = () => {
   return (
@@ -67,6 +68,12 @@ const RegisterPage: React.FC = () => {
           </Link>
         </div>
       </div>
+      {/* Pepe Image */}
+      <img
+        src={businessPepe}
+        alt="Business Pepe"
+        className="absolute left-0 bottom-0 h-500 w-auto md:h-500 md:w-auto"
+      />
     </div>
   );
 };
