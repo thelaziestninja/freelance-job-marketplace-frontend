@@ -15,14 +15,29 @@ export const removeToken = () => {
   sessionStorage.removeItem("token");
 };
 
+export const setUserType = (userType: "client" | "freelancer") => {
+  sessionStorage.setItem("userType", userType);
+};
+
+export const getUserType = () => {
+  return sessionStorage.getItem("userType") as "client" | "freelancer" | null;
+};
+
+export const removeUserType = () => {
+  sessionStorage.removeItem("userType");
+};
+
 export const login = async (username: string, password: string) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {
       username,
       password,
     });
-    setToken(response.data.token); // Using setToken here
-    return response.data.token;
+    const token = response.data.token;
+    const userType = response.data.user.user_type as "client" | "freelancer";
+    setToken(token);
+    setUserType(userType);
+    return { token, userType };
   } catch (error) {
     console.error("Login error", error);
     throw error;

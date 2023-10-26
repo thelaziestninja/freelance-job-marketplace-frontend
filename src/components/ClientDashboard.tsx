@@ -1,38 +1,32 @@
-import React from "react";
-import { useAuth } from "../auth/auth";
-import FreelancerDashboard from "../components/FreelancerDashboard";
-import ClientDashboard from "../components/ClientDashboard";
+// import React, { useState } from "react";
 // import JobList from "../components/job/JobList";
-// import { logout } from "../auth/authService";
-// import { useNavigate } from "react-router-dom";
-// import { useProfiles } from "../hooks/useProfiles";
 // import Profile from "../components/profiles/Profile";
-// import { ProfileI } from "../types";
+// import { useProfiles } from "../hooks/useProfiles";
+// import JobCreationModal from "../components/job/JobCreationModal"; // Assume you have this component
+// import ApplicationViewModal from "../components/job/ApplicationViewModal"; // Assume you have this component
+// import ReviewModal from "../components/reviews/ReviewModal"; // Assume you have this component
 
-const DashboardPage: React.FC = () => {
-  const { userType } = useAuth();
-  // console.log("User Type:", userType);
-  // const { data: profiles } = useProfiles();
-  // const navigate = useNavigate();
+const ClientDashboard: React.FC = () => {
+  //   const { data: profiles } = useProfiles();
+  //   const [isJobCreationModalOpen, setIsJobCreationModalOpen] = useState(false);
+  //   const [isApplicationViewModalOpen, setIsApplicationViewModalOpen] =
+  //     useState(false);
+  //   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error("Logout error", error);
-  //     // Display error to user (see below for method)
-  //   }
-  // };
-  // console.log("Profiles:", profiles);
+  //   const handleJobCreationModalToggle = () => {
+  //     setIsJobCreationModalOpen((prev) => !prev);
+  //   };
+
+  //   const handleApplicationViewModalToggle = () => {
+  //     setIsApplicationViewModalOpen((prev) => !prev);
+  //   };
+
+  //   const handleReviewModalToggle = () => {
+  //     setIsReviewModalOpen((prev) => !prev);
 
   return (
-    <div className="dashboard">
-      {userType === "freelancer" ? (
-        <FreelancerDashboard />
-      ) : (
-        <ClientDashboard />
-      )}
+    <div>
+      <h1>Client Dashboard</h1>
     </div>
     // <div className="h-screen bg-custom-pink flex flex-col">
     //   {/* Logout Button */}
@@ -79,4 +73,4 @@ const DashboardPage: React.FC = () => {
   );
 };
 
-export default DashboardPage;
+export default ClientDashboard;
