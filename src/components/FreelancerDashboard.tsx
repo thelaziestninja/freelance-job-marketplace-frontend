@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../hooks/useProfiles";
-import JobList from "./job/JobList";
+import JobList from "./job/FreelanceJobList";
 import { ProfileI } from "../types";
 import Profile from "./profiles/Profile";
 import { useAuth } from "../auth/auth";
@@ -19,7 +19,7 @@ const FreelancerDashboard: React.FC = () => {
   const { userType } = useAuth();
   const { data: profiles } = useProfiles();
 
-  console.log("Reviews:", reviews);
+  // console.log("Reviews:", reviews);
 
   useEffect(() => {
     if (userType === "client") {

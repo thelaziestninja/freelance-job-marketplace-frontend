@@ -57,6 +57,15 @@ export const getApplications = async (): Promise<
   return api.get<ApplicationI[]>("/applications");
 };
 
+export const createApplication = async (
+  jobId: string,
+  coverLetter: string
+): Promise<AxiosResponse<ApplicationI>> => {
+  return api.post<ApplicationI>(`/job/${jobId}/apply`, {
+    cover_letter: coverLetter,
+  });
+};
+
 // Reviews API
 export const getReviewsByFreelancer = (
   freelancerId: string
