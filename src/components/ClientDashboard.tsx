@@ -35,7 +35,7 @@ const ClientDashboard: React.FC = () => {
 
   useEffect(() => {
     if (userType === "client") {
-      navigate("/client-dashboard");
+      navigate("/dashboard");
     }
   }, [userType, navigate]);
 

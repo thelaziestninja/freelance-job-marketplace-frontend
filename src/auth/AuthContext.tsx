@@ -24,6 +24,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     AuthService.getUserType() // You should define and use a getUserType function similar to getToken
   );
 
+  console.log("Token in AuthProvider:", token);
+  console.log("UserType in AuthProvider:", userType);
+
   //Debug Token After Login
   const login = async (username: string, password: string) => {
     console.log("login function called");
@@ -36,11 +39,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async () => {
-    if (token) {
+    try {
       await AuthService.logout();
-      sessionStorage.removeItem("token");
       setToken(null);
-      setUserType(null);
+      setUserType(null); // Explicitly set userType to null
+      sessionStorage.removeItem("token");
+    } catch (error) {
+      console.error("Logout error", error);
     }
   };
 

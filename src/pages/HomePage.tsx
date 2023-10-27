@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [token, navigate]);
 

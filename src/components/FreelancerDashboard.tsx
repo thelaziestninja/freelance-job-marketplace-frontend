@@ -14,26 +14,20 @@ const FreelancerDashboard: React.FC = () => {
 
   useEffect(() => {
     if (userType === "client") {
-      navigate("/client-dashboard");
+      navigate("/dashboard");
     }
   }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {
       await logout();
+      console.log("User type after logout:", userType);
       navigate("/");
     } catch (error) {
       console.error("Logout error", error);
-      // Display error to user (see below for method)
     }
   };
-  console.log("Profiles:", profiles);
-
-  //Debug Token in Component
-  // useEffect(() => {
-  //   const token = sessionStorage.getItem("token");
-  //   console.log("Token in FreelancerDashboard component:", String(token));
-  // }, []);
+  // console.log("Profiles:", profiles);
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
