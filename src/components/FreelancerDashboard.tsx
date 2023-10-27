@@ -14,7 +14,7 @@ const FreelancerDashboard: React.FC = () => {
 
   useEffect(() => {
     if (userType === "client") {
-      navigate("/dashboard");
+      navigate("/login");
     }
   }, [userType, navigate]);
 

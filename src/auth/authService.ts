@@ -56,7 +56,7 @@ export const logout = async () => {
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    removeToken(); // Using removeToken here
+    removeToken();
     removeUserType();
   } catch (error) {
     console.error("Logout error", error);

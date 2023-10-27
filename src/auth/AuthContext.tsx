@@ -42,8 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await AuthService.logout();
       setToken(null);
-      setUserType(null); // Explicitly set userType to null
-      sessionStorage.removeItem("token");
+      setUserType(null);
     } catch (error) {
       console.error("Logout error", error);
     }
