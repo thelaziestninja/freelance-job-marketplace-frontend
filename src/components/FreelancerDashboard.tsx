@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../hooks/useProfiles";
@@ -6,17 +6,26 @@ import JobList from "./job/JobList";
 import { ProfileI } from "../types";
 import Profile from "./profiles/Profile";
 import { useAuth } from "../auth/auth";
+import ProfileModal from "./profiles/ProfileModal";
+import { useReviewsByFreelancer } from "../hooks/useReviews";
 
 const FreelancerDashboard: React.FC = () => {
-  const { data: profiles } = useProfiles();
+  const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const { data: reviewsData, isLoading: isLoadingReviews } =
+    useReviewsByFreelancer(selectedProfile?._id ?? "");
+  const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
   const { userType } = useAuth();
+  const { data: profiles } = useProfiles();
+
+  console.log("Reviews:", reviews);
 
   useEffect(() => {
     if (userType === "client") {
       navigate("/login");
     }
-  }, [userType, navigate]);
+  }, [userType, navigate, profiles]);
 
   const handleLogout = async () => {
     try {
@@ -27,7 +36,15 @@ const FreelancerDashboard: React.FC = () => {
       console.error("Logout error", error);
     }
   };
-  // console.log("Profiles:", profiles);
+
+  const handleProfileClick = (profile: ProfileI) => {
+    setSelectedProfile(profile);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
@@ -40,30 +57,32 @@ const FreelancerDashboard: React.FC = () => {
       </button>
 
       {/* Main Content */}
-      <div className="flex-1 flex bg-custom-pink p-8 shadow-lg space-y-8 overflow-y-auto scrollbar-thin scrollbar-thumb-custom-coral scrollbar-track-custom-purple">
+      <div className="grid grid-cols-5 bg-custom-pink p-8 overflow-auto">
         {/* Jobs you might like */}
-        <div className="flex-1 bg-dark-pink p-8 overflow-y-auto scrollbar-section">
-          <div className="overflow-y-auto pr-4">
-            <JobList />
-          </div>
+        <div className="col-span-4 bg-dark-pink p-8 rounded-lg">
+          <JobList />
         </div>
 
         {/* Freelancers */}
-        <div className="w-64 bg-custom-pink p-8 space-y-4 overflow-y-auto scrollbar-section">
+        <div className="col-span-1 bg-custom-pink p-8 space-y-4">
           <h2 className="text-2xl font-bold mb-4 text-white ml-auto">
             Freelancers
           </h2>
-          <div className="flex flex-col items-center">
-            {profiles && profiles.data && Array.isArray(profiles.data) ? (
-              profiles.data.map((profile: ProfileI) => (
-                <Profile
+          <div className="flex flex-col items-center ">
+            {profiles && Array.isArray(profiles) ? (
+              profiles.map((profile: ProfileI) => (
+                <div
                   key={profile._id}
-                  profile={profile}
-                  imageUrl={
-                    profile.imageUrl ||
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU"
-                  }
-                />
+                  onClick={() => handleProfileClick(profile)}
+                >
+                  <Profile
+                    profile={profile}
+                    imageUrl={
+                      profile.imageUrl ||
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU"
+                    }
+                  />
+                </div>
               ))
             ) : (
               <p>No profiles available</p>
@@ -71,6 +90,17 @@ const FreelancerDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Profile Modal */}
+      {selectedProfile && (
+        <ProfileModal
+          profile={selectedProfile}
+          reviews={reviews}
+          isLoadingReviews={isLoadingReviews}
+          isOpen={modalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

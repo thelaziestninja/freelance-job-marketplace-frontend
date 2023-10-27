@@ -39,8 +39,9 @@ export const registerUser = async (userData: RegisterUserDataI) => {
 };
 
 // Profiles API
-export const getProfiles = (): Promise<AxiosResponse<ProfileI[]>> => {
-  return api.get<ProfileI[]>("/profiles");
+export const getProfiles = async (): Promise<AxiosResponse<ProfileI[]>> => {
+  const response = await api.get("/profiles");
+  return response.data.profiles;
 };
 
 // Jobs API
@@ -50,11 +51,15 @@ export const getJobs = async (): Promise<JobsResponse> => {
 };
 
 // Applications API
-export const getApplications = (): Promise<AxiosResponse<ApplicationI[]>> => {
+export const getApplications = async (): Promise<
+  AxiosResponse<ApplicationI[]>
+> => {
   return api.get<ApplicationI[]>("/applications");
 };
 
 // Reviews API
-export const getReviews = (): Promise<AxiosResponse<ReviewI[]>> => {
-  return api.get<ReviewI[]>("/reviews");
+export const getReviewsByFreelancer = (
+  freelancerId: string
+): Promise<AxiosResponse<ReviewI[]>> => {
+  return api.get<ReviewI[]>(`/profile/${freelancerId}/reviews`);
 };
