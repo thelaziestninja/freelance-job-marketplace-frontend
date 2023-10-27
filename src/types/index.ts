@@ -8,6 +8,12 @@ export interface UserI {
   user_type: UserType;
 }
 
+export interface LoginResponseI {
+  message: string;
+  token: string;
+  user: UserI;
+}
+
 export enum USER_TYPE {
   CLIENT = "client",
   FREELANCER = "freelancer",
@@ -23,11 +29,12 @@ export interface RegisterUserDataI {
 export interface ProfileI {
   _id: string;
   user: string;
+  name: string;
   skills: string[];
   description: string;
   hourly_rate: number;
   languages?: string[];
-  imageUrl?: string;
+  imgUrl?: string;
 }
 
 export interface JobI {

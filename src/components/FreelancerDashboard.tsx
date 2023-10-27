@@ -8,6 +8,7 @@ import Profile from "./profiles/Profile";
 import { useAuth } from "../auth/auth";
 import ProfileModal from "./profiles/ProfileModal";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { Link } from "react-router-dom";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -48,13 +49,24 @@ const FreelancerDashboard: React.FC = () => {
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
-      {/* Logout Button */}
-      <button
-        className="text-white ml-auto mt-3 mr-3 hover:underline"
-        onClick={handleLogout}
-      >
-        Log out
-      </button>
+      {/* Profile Button */}
+      <div className="flex justify-between items-center p-3">
+        <Link
+          to="/profile"
+          className="flex items-center space-x-2 hover:underline"
+        >
+          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>{" "}
+          {/* This is a placeholder for the user's profile picture */}
+          <span className="text-white">My Profile</span>
+        </Link>
+        {/* Logout Button */}
+        <button
+          className="text-white ml-auto mt-3 mr-3 hover:underline"
+          onClick={handleLogout}
+        >
+          Log out
+        </button>
+      </div>
 
       {/* Main Content */}
       <div className="grid grid-cols-5 bg-custom-pink p-8 overflow-auto">
@@ -65,7 +77,7 @@ const FreelancerDashboard: React.FC = () => {
 
         {/* Freelancers */}
         <div className="col-span-1 bg-custom-pink p-8 space-y-4">
-          <h2 className="text-2xl font-bold mb-4 text-white ml-auto">
+          <h2 className="text-2xl font-bold mb-4 text-white text-center">
             Freelancers
           </h2>
           <div className="flex flex-col items-center ">
@@ -75,13 +87,7 @@ const FreelancerDashboard: React.FC = () => {
                   key={profile._id}
                   onClick={() => handleProfileClick(profile)}
                 >
-                  <Profile
-                    profile={profile}
-                    imageUrl={
-                      profile.imageUrl ||
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU"
-                    }
-                  />
+                  <Profile profile={profile} />
                 </div>
               ))
             ) : (
