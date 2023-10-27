@@ -9,10 +9,13 @@ import { useProfiles } from "../hooks/useProfiles";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
 import ProfileModal from "./profiles/ProfileModal";
 import { Link } from "react-router-dom";
+import FloatingActionButton from "./UI/Button";
+import JobFormModal from "./job/JobFormModal";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isJobFormOpen, setIsJobFormOpen] = useState(false);
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
@@ -47,8 +50,16 @@ const ClientDashboard: React.FC = () => {
     setModalOpen(false);
   };
 
+  const openJobForm = () => {
+    setIsJobFormOpen(true);
+  };
+
+  const closeJobForm = () => {
+    setIsJobFormOpen(false);
+  };
+
   return (
-    <div className="h-screen bg-custom-pink flex flex-col">
+    <div className="h-screen bg-custom-pink flex flex-col relative">
       {/* Profile Button */}
       <div className="flex justify-between items-center p-3">
         <Link
@@ -107,6 +118,8 @@ const ClientDashboard: React.FC = () => {
           onClose={handleCloseModal}
         />
       )}
+      <FloatingActionButton onClick={openJobForm} />
+      <JobFormModal isOpen={isJobFormOpen} onClose={closeJobForm} />
     </div>
   );
 };

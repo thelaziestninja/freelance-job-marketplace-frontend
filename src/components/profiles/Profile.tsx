@@ -17,7 +17,6 @@ const Profile: React.FC<ProfileProps> = ({ profile }) => {
         className="w-24 h-24 rounded-full object-cover" // Added rounded-full and object-cover classes
       />
       <h3 className="mt-0 text-center">{profile.name}</h3>
-      {/* Render other profile information */}
     </div>
   );
 };

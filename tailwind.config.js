@@ -9,6 +9,7 @@ export default {
         "dark-pink": "#c3598e",
         "custom-coral": "#D07E7E",
         "custom-purple": "#D07ED0",
+        "custom-red": "c51b1b",
       },
     },
   },
