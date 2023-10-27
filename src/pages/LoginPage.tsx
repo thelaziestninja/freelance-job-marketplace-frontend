@@ -11,8 +11,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const token = await login(username, password);
-      sessionStorage.setItem("token", token);
+      await login(username, password);
       // alert("Login Successful!");
       navigate("/dashboard");
     } catch (error) {
@@ -20,6 +19,7 @@ const LoginPage: React.FC = () => {
       alert("Login failed. Please check your username and password.");
     }
   };
+
   return (
     <div className="h-screen bg-custom-pink flex flex-col justify-center items-center">
       {/* Login Box */}

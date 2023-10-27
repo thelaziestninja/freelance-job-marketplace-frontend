@@ -1,9 +1,9 @@
-// frontend2/src/auth/authService.ts
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/user";
 
 export const setToken = (token: string) => {
+  console.log("Token before setting to session storage:", token);
   sessionStorage.setItem("token", token);
 };
 
@@ -33,6 +33,8 @@ export const login = async (username: string, password: string) => {
       username,
       password,
     });
+    console.log("Token from login response:", response.data.token);
+    console.log("Type of token:", typeof response.data.token);
     const token = response.data.token;
     const userType = response.data.user.user_type as "client" | "freelancer";
     setToken(token);

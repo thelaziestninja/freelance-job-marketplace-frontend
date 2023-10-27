@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../hooks/useProfiles";
 import JobList from "./job/JobList";
 import { ProfileI } from "../types";
 import Profile from "./profiles/Profile";
+import { useAuth } from "../auth/auth";
 
 const FreelancerDashboard: React.FC = () => {
   const { data: profiles } = useProfiles();
   const navigate = useNavigate();
+  const { userType } = useAuth();
+
+  useEffect(() => {
+    if (userType === "client") {
+      navigate("/client-dashboard");
+    }
+  }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -20,6 +28,12 @@ const FreelancerDashboard: React.FC = () => {
     }
   };
   console.log("Profiles:", profiles);
+
+  //Debug Token in Component
+  // useEffect(() => {
+  //   const token = sessionStorage.getItem("token");
+  //   console.log("Token in FreelancerDashboard component:", String(token));
+  // }, []);
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">

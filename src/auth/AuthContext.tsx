@@ -17,14 +17,21 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(AuthService.getToken());
+  const [token, setToken] = useState<string | null>(
+    String(AuthService.getToken())
+  );
   const [userType, setUserType] = useState<"client" | "freelancer" | null>(
     AuthService.getUserType() // You should define and use a getUserType function similar to getToken
   );
+
+  //Debug Token After Login
   const login = async (username: string, password: string) => {
     console.log("login function called");
     const { token, userType } = await AuthService.login(username, password);
-    setToken(token);
+    console.log("Token after login in AuthContext:", token);
+    if (typeof token === "string") {
+      AuthService.setToken(token);
+    }
     setUserType(userType);
   };
 

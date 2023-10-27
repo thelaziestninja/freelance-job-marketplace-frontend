@@ -5,6 +5,11 @@
 // import JobCreationModal from "../components/job/JobCreationModal"; // Assume you have this component
 // import ApplicationViewModal from "../components/job/ApplicationViewModal"; // Assume you have this component
 // import ReviewModal from "../components/reviews/ReviewModal"; // Assume you have this component
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+// import { useProfiles } from "../hooks/useProfiles";
+import { useAuth } from "../auth/auth";
+// import { logout } from "../auth/authService";
 
 const ClientDashboard: React.FC = () => {
   //   const { data: profiles } = useProfiles();
@@ -23,6 +28,26 @@ const ClientDashboard: React.FC = () => {
 
   //   const handleReviewModalToggle = () => {
   //     setIsReviewModalOpen((prev) => !prev);
+
+  // const { data: profiles } = useProfiles();
+  const navigate = useNavigate();
+  const { userType } = useAuth();
+
+  useEffect(() => {
+    if (userType === "client") {
+      navigate("/client-dashboard");
+    }
+  }, [userType, navigate]);
+
+  // const handleLogout = async () => {
+  //   try {
+  //     await logout();
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error("Logout error", error);
+  //     // Display error to user (see below for method)
+  //   }
+  // };
 
   return (
     <div>

@@ -13,9 +13,11 @@ const api = axios.create({
   baseURL: "http://localhost:3000",
 });
 
+//Debug Token During API Calls
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("token");
+    console.log("Token before API call in api.ts:", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
