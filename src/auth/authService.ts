@@ -20,7 +20,7 @@ export const setUserType = (userType: "client" | "freelancer") => {
 };
 
 export const getUserType = () => {
-  return sessionStorage.getItem("userType") as "client" | "freelancer" | null;
+  return sessionStorage.getItem("userType") as "client" | "freelancer";
 };
 
 export const removeUserType = () => {
@@ -37,8 +37,7 @@ export const login = async (username: string, password: string) => {
     console.log("Type of token:", typeof response.data.token);
     const token = response.data.token;
     const userType = response.data.user.user_type as "client" | "freelancer";
-    setToken(token);
-    setUserType(userType);
+    //in services we shouldnt add any logic
     return { token, userType };
   } catch (error) {
     console.error("Login error", error);

@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/auth";
-import ClientJobList from "./job/ClientJobList";
 import { ProfileI } from "../types";
+import { useAuth } from "../auth/auth";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Profile from "./profiles/Profile";
 import { logout } from "../auth/authService";
-import { useProfiles } from "../hooks/useProfiles";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
-import ProfileModal from "./profiles/ProfileModal";
-import { Link } from "react-router-dom";
-import FloatingActionButton from "./UI/Button";
 import JobFormModal from "./job/JobFormModal";
+import { useNavigate } from "react-router-dom";
+import FloatingActionButton from "./UI/Button";
+import ClientJobList from "./job/ClientJobList";
+import { useProfiles } from "../hooks/useProfiles";
+import ProfileModal from "./profiles/ProfileModal";
+
+import { useReviewsByFreelancer } from "../hooks/useReviews";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -22,14 +23,6 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { userType } = useAuth();
   const { data: profiles } = useProfiles();
-
-  // console.log("Reviews:", reviews);
-
-  useEffect(() => {
-    if (userType === "client") {
-      navigate("/login");
-    }
-  }, [userType, navigate, profiles]);
 
   const handleLogout = async () => {
     try {
