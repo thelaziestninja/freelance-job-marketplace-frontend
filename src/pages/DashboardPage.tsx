@@ -1,21 +1,25 @@
 import React from "react";
+import NoContent from "../components/NoContent";
 import { useAuth } from "../auth/auth";
 import ClientDashboard from "../components/ClientDashboard";
 import FreelancerDashboard from "../components/FreelancerDashboard";
 
-const DashboardPage: React.FC = () => {
+const ComponentMap = {
+  freelancer: FreelancerDashboard,
+  client: ClientDashboard,
+};
+
+const Dashboard: React.FC = () => {
   const { userType } = useAuth();
-  // console.log("User Type:", userType);
+  console.log("User Type:", userType);
+
+  const Component = userType ? ComponentMap[userType] : NoContent;
 
   return (
     <div className="dashboard">
-      {userType === "freelancer" ? (
-        <FreelancerDashboard />
-      ) : (
-        <ClientDashboard />
-      )}
+      <Component />
     </div>
   );
 };
 
-export default DashboardPage;
+export default Dashboard;
