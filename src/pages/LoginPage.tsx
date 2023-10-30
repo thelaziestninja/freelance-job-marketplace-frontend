@@ -13,7 +13,7 @@ export const LoginPage: React.FC = () => {
     e.preventDefault();
     try {
       await login(username, password);
-      alert("Login Successful!");
+      // alert("Login Successful!");
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error", error);

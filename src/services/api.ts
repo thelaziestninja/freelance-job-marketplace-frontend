@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import {
   UserI,
   ProfileI,
@@ -8,6 +7,7 @@ import {
   JobsResponse,
   RegisterUserDataI,
 } from "../types";
+import axios, { AxiosResponse } from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
@@ -17,7 +17,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("token");
-    console.log("Token before API call in api.ts:", token);
+    // console.log("Token before API call in api.ts:", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -14,8 +14,8 @@ const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, userType } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  console.log("isAuthenticated:", isAuthenticated);
-  console.log("userType:", userType);
+  // console.log("isAuthenticated:", isAuthenticated);
+  // console.log("userType:", userType);
 
   useEffect(() => {
     if (isAuthenticated === false) {

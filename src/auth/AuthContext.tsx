@@ -39,7 +39,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     initialIsAuthenticated
   );
-  // const [loading, setLoading] = useState<boolean>(true);
 
   const login = async (username: string, password: string) => {
     const data = await AuthService.login(username, password);
