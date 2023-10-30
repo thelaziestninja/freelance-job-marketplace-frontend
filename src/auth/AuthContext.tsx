@@ -1,8 +1,9 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
 import * as AuthService from "./authService";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
+  loading: boolean;
   token: string | undefined;
   userType: "client" | "freelancer" | undefined;
   login: (username: string, password: string) => Promise<void>;
@@ -11,6 +12,7 @@ export interface AuthContextType {
 
 const defaultAuthContext: AuthContextType = {
   isAuthenticated: false,
+  loading: true,
   token: undefined,
   userType: undefined,
   login: async () => {},
@@ -29,11 +31,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | undefined>(undefined);
   const [userType, setUserType] = useState<UserType | undefined>(undefined);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkAuthStatus = () => {
       const checkedToken = localStorage.getItem("token");
       setIsAuthenticated(!!checkedToken);
+      setLoading(false);
     };
     checkAuthStatus();
   }, []);
@@ -71,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, userType, login, logout }}
+      value={{ isAuthenticated, loading, token, userType, login, logout }}
     >
       {children}
     </AuthContext.Provider>
