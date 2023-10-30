@@ -1,9 +1,9 @@
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
-import NoContent from "../../components/NoContent";
+import NoContent from "../components/NoContent";
 import React, { useContext, useEffect } from "react";
-import FreelancerDashboard from "../../components/FreelancerDashboard";
-import ClientDashboard from "../../components/ClientDashboard";
+import FreelancerDashboard from "../components/FreelancerDashboard";
+import ClientDashboard from "../components/ClientDashboard";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,

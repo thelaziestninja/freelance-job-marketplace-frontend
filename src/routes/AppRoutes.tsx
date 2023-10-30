@@ -5,7 +5,7 @@ import {
   DashboardPage,
   ProfilePage,
   ApplicationPage,
-} from "../../pages";
+} from "../pages";
 import ProtectedRoute from "./ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
 

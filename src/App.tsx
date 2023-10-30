@@ -1,6 +1,6 @@
 import "./App.css";
 // import Header from "./components/UI/Header";
-import AppRoutes from "./auth/routes/AppRoutes";
+import AppRoutes from "./routes/AppRoutes";
 import { AuthProvider } from "./auth/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { NotificationProvider } from "./context/NotificationProvider";
