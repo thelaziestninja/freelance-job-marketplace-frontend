@@ -4,7 +4,6 @@ import { AuthContext } from "../auth/AuthContext";
 import React, { useContext, useEffect } from "react";
 import ClientDashboard from "../components/ClientDashboard";
 import FreelancerDashboard from "../components/FreelancerDashboard";
-import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,
@@ -12,18 +11,17 @@ const ComponentMap = {
 };
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, userType, loading } = useContext(AuthContext);
+  const { isAuthenticated, userType } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  console.log("isAuthenticated:", isAuthenticated);
+  console.log("userType:", userType);
+
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated === false) {
       navigate("/login");
     }
-  }, [isAuthenticated, loading, navigate]);
-
-  if (loading) {
-    return <LoadingSpinner />; // Render loading spinner while checking authentication status
-  }
+  }, [isAuthenticated, navigate]);
 
   if (!isAuthenticated) {
     return <NoContent />;

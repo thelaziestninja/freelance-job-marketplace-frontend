@@ -1,9 +1,9 @@
 import * as AuthService from "./authService";
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useState, ReactNode } from "react";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
-  loading: boolean;
+
   token: string | undefined;
   userType: "client" | "freelancer" | undefined;
   login: (username: string, password: string) => Promise<void>;
@@ -12,7 +12,6 @@ export interface AuthContextType {
 
 const defaultAuthContext: AuthContextType = {
   isAuthenticated: false,
-  loading: true,
   token: undefined,
   userType: undefined,
   login: async () => {},
@@ -28,19 +27,19 @@ interface AuthProviderProps {
 type UserType = "client" | "freelancer";
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | undefined>(undefined);
-  const [userType, setUserType] = useState<UserType | undefined>(undefined);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const initialToken = localStorage.getItem("token") || undefined;
+  const initialUserType =
+    (localStorage.getItem("userType") as UserType | null) || undefined;
+  const initialIsAuthenticated = !!initialToken;
 
-  useEffect(() => {
-    const checkAuthStatus = () => {
-      const checkedToken = localStorage.getItem("token");
-      setIsAuthenticated(!!checkedToken);
-      setLoading(false);
-    };
-    checkAuthStatus();
-  }, []);
+  const [token, setToken] = useState<string | undefined>(initialToken);
+  const [userType, setUserType] = useState<UserType | undefined>(
+    initialUserType
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    initialIsAuthenticated
+  );
+  // const [loading, setLoading] = useState<boolean>(true);
 
   const login = async (username: string, password: string) => {
     const data = await AuthService.login(username, password);
@@ -75,7 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, token, userType, login, logout }}
+      value={{ isAuthenticated, token, userType, login, logout }}
     >
       {children}
     </AuthContext.Provider>
