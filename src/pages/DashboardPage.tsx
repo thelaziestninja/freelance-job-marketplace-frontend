@@ -9,7 +9,7 @@ const ComponentMap = {
   client: ClientDashboard,
 };
 
-const Dashboard: React.FC = () => {
+export const DashboardPage: React.FC = () => {
   const { userType } = useAuth();
   console.log("User Type:", userType);
 
@@ -21,5 +21,3 @@ const Dashboard: React.FC = () => {
     </div>
   );
 };
-
-export default Dashboard;

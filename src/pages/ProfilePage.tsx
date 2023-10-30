@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProfilePage: React.FC = () => {
+export const ProfilePage: React.FC = () => {
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
       {/* Main Content */}
@@ -24,5 +24,3 @@ const ProfilePage: React.FC = () => {
     </div>
   );
 };
-
-export default ProfilePage;

@@ -3,7 +3,7 @@ import "../styles/tailwind.css";
 import { Link } from "react-router-dom";
 import businessPepe from "../assets/businesspepe.png";
 
-const HomePage: React.FC = () => {
+export const HomePage: React.FC = () => {
   return (
     <div className="h-screen bg-custom-pink flex flex-col justify-center items-center pt-32 relative">
       {/* "Not Jobless" Text */}
@@ -40,5 +40,3 @@ const HomePage: React.FC = () => {
     </div>
   );
 };
-
-export default HomePage;

@@ -15,7 +15,7 @@ type FormData = {
   [key: string]: string; // This is the index signature
 };
 
-const RegisterPage: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const registerMutation = useRegister();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
@@ -120,5 +120,3 @@ const RegisterPage: React.FC = () => {
     </div>
   );
 };
-
-export default RegisterPage;

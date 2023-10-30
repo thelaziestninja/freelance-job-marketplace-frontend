@@ -1,16 +1,23 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 import * as AuthService from "./authService";
 
 export interface AuthContextType {
+  isAuthenticated: boolean;
   token: string | undefined;
   userType: "client" | "freelancer" | undefined;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+const defaultAuthContext: AuthContextType = {
+  isAuthenticated: false,
+  token: undefined,
+  userType: undefined,
+  login: async () => {},
+  logout: async () => {},
+};
+
+export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -19,25 +26,32 @@ interface AuthProviderProps {
 type UserType = "client" | "freelancer";
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string>();
-  const [userType, setUserType] = useState<UserType>();
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const [userType, setUserType] = useState<UserType | undefined>(undefined);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  //Debug Token After Login
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const checkedToken = localStorage.getItem("token");
+      setIsAuthenticated(!!checkedToken);
+    };
+    checkAuthStatus();
+  }, []);
+
   const login = async (username: string, password: string) => {
-    // console.log("login function called");
     const data = await AuthService.login(username, password);
-    // console.log("Token after login in AuthContext:", token);
     if (typeof data.token !== "string") throw new Error("Token not valid!");
     updateToken(data.token);
     updateUserType(data.userType);
+    setIsAuthenticated(true);
   };
 
-  const updateToken = async (providedToken: string) => {
+  const updateToken = (providedToken: string) => {
     AuthService.setToken(providedToken);
     setToken(providedToken);
   };
 
-  const updateUserType = async (providedUserType: UserType) => {
+  const updateUserType = (providedUserType: UserType) => {
     AuthService.setUserType(providedUserType);
     setUserType(providedUserType);
   };
@@ -49,13 +63,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUserType(undefined);
       AuthService.removeToken();
       AuthService.removeUserType();
+      setIsAuthenticated(false);
     } catch (error) {
       console.error("Logout error", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ token, userType, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, token, userType, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

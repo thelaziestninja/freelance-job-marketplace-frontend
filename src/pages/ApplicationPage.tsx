@@ -7,7 +7,7 @@ type Application = {
   coverLetter: string; // Assuming you might want to display a brief cover letter or something similar.
 };
 
-const ApplicationPage: React.FC = () => {
+export const ApplicationPage: React.FC = () => {
   // Placeholder data. Replace this with actual data fetched from your backend.
   const applications: Application[] = [
     {
@@ -52,5 +52,3 @@ const ApplicationPage: React.FC = () => {
     </div>
   );
 };
-
-export default ApplicationPage;
