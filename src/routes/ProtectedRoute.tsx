@@ -1,17 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import NoContent from "../components/NoContent";
 import { AuthContext } from "../auth/AuthContext";
 import React, { useContext, useEffect } from "react";
-import ClientDashboard from "../components/ClientDashboard";
-import FreelancerDashboard from "../components/FreelancerDashboard";
-
-const ComponentMap = {
-  freelancer: FreelancerDashboard,
-  client: ClientDashboard,
-};
+import { useNavigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, userType } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // console.log("isAuthenticated:", isAuthenticated);
@@ -27,8 +20,7 @@ const ProtectedRoute: React.FC = () => {
     return <NoContent />;
   }
 
-  const Component = userType ? ComponentMap[userType] : NoContent;
-  return <Component />;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

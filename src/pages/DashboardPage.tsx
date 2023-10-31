@@ -1,6 +1,6 @@
 import React from "react";
-import NoContent from "../components/NoContent";
 import { useAuth } from "../auth/auth";
+import NoContent from "../components/NoContent";
 import ClientDashboard from "../components/ClientDashboard";
 import FreelancerDashboard from "../components/FreelancerDashboard";
 

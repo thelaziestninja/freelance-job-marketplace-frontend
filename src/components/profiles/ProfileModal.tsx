@@ -15,7 +15,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  console.log("Reviews in Modal:", reviews);
+  // console.log("Reviews in Modal:", reviews);
   if (!isOpen) return null;
 
   return (
@@ -33,7 +33,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         <div className="flex">
           <img
             src={
-              profile.imageUrl ||
+              profile.imgUrl ||
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU"
             }
             alt={profile.user}
