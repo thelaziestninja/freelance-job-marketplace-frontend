@@ -1,6 +1,6 @@
 // frontend2/src/components/Notification.tsx
 import React from "react";
-import { useNotificationContext } from "../../context/useNotificationContext";
+import { useNotificationContext } from "../../context/notification/useNotificationContext";
 
 const Notification: React.FC = () => {
   const { message } = useNotificationContext(); // Using the custom hook here

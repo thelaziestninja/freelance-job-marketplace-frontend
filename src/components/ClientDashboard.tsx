@@ -12,6 +12,7 @@ import { useProfiles } from "../hooks/useProfiles";
 import ProfileModal from "./profiles/ProfileModal";
 
 import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { useUser } from "../context/user/useUserContext";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -23,6 +24,7 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { userType } = useAuth();
   const { data: profiles } = useProfiles();
+  const { profilePicture } = useUser();
 
   const handleLogout = async () => {
     try {
@@ -52,15 +54,19 @@ const ClientDashboard: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-custom-pink flex flex-col relative">
-      {/* Profile Button */}
+    <div className="h-screen bg-custom-pink flex flex-col">
+      {/* Profile Button and Logout Button */}
       <div className="flex justify-between items-center p-3">
+        {/* Profile Picture and My Profile Link */}
         <Link
           to="/profile"
           className="flex items-center space-x-2 hover:underline"
         >
-          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>{" "}
-          {/* This is a placeholder for the user's profile picture */}
+          <img
+            src={profilePicture}
+            alt="Profile"
+            className="w-8 h-8 rounded-full"
+          />
           <span className="text-white">My Profile</span>
         </Link>
         {/* Logout Button */}
