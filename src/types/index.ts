@@ -37,6 +37,15 @@ export interface ProfileI {
   imgUrl?: string;
 }
 
+export interface ProfileInput {
+  skills: string[];
+  name: string;
+  imgUrl?: string;
+  description: string;
+  hourly_rate: number;
+  languages?: string[];
+}
+
 export interface JobI {
   _id: string;
   client_id: string;

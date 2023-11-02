@@ -6,6 +6,7 @@ import {
   ReviewI,
   JobsResponse,
   RegisterUserDataI,
+  ProfileInput,
 } from "../types";
 import axios, { AxiosResponse } from "axios";
 
@@ -48,6 +49,12 @@ export const checkProfileExists = async (): Promise<
   AxiosResponse<{ exists: boolean }>
 > => {
   return api.get<{ exists: boolean }>("/profile/exists");
+};
+
+export const createProfile = async (
+  profileData: ProfileInput
+): Promise<AxiosResponse<ProfileI>> => {
+  return api.post<ProfileI>("/profile", profileData);
 };
 
 // Jobs API

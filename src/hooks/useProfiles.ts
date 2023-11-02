@@ -1,7 +1,11 @@
-import { useQuery } from "react-query";
-import { checkProfileExists, getProfiles } from "../services/api";
-import { AxiosResponse } from "axios";
-import { ProfileI } from "../types";
+import { UseMutationResult, useMutation, useQuery } from "react-query";
+import {
+  checkProfileExists,
+  createProfile,
+  getProfiles,
+} from "../services/api";
+import { AxiosError, AxiosResponse } from "axios";
+import { ProfileI, ProfileInput } from "../types";
 
 export const useProfiles = () => {
   return useQuery<AxiosResponse<ProfileI[]>, Error>("profiles", getProfiles);
@@ -12,4 +16,14 @@ export const useProfileExistence = () => {
     const response = await checkProfileExists();
     return response.data;
   });
+};
+
+export const useCreateProfile = (): UseMutationResult<
+  AxiosResponse<ProfileI>,
+  AxiosError,
+  ProfileInput
+> => {
+  return useMutation<AxiosResponse<ProfileI>, AxiosError, ProfileInput>(
+    createProfile
+  );
 };
