@@ -1,42 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUser } from "../context/user/useUserContext";
-import { useProfileExistence } from "../hooks/useProfiles";
+import { useProfile, useProfileExistence } from "../hooks/useProfiles";
+import ProfileFormModal from "../components/profiles/ProfileFormModal";
+import { useQueryClient } from "react-query";
 
 export const ProfilePage: React.FC = () => {
   const { profilePicture } = useUser();
-  const { data, isLoading } = useProfileExistence();
+  const { data: existenceData, isLoading: isLoadingExistence } =
+    useProfileExistence();
+  const { data: profileData, isLoading: isLoadingProfile } = useProfile();
 
-  if (isLoading) {
+  const [isProfileFormModalOpen, setIsProfileFormModalOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const openProfileFormModal = () => {
+    setIsProfileFormModalOpen(true);
+  };
+
+  const closeProfileFormModal = () => {
+    setIsProfileFormModalOpen(false);
+    queryClient.invalidateQueries("profileExistence");
+  };
+
+  if (isLoadingExistence || isLoadingProfile) {
     return <div>Loading...</div>;
   }
 
-  const profileExists = data?.exists ?? false;
+  const profileExists = existenceData?.exists ?? false;
 
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
+      {/* Profile Form Modal */}
+      <ProfileFormModal
+        isOpen={isProfileFormModalOpen}
+        onClose={closeProfileFormModal}
+      />
+
       {/* Main Content */}
       <div className="w-full max-w-screen-md bg-white p-8 rounded-lg shadow-md flex flex-col items-center space-y-8">
         {/* User Profile Photo */}
         <img
-          src={profilePicture}
+          src={profileData?.imgUrl || profilePicture}
           alt="Profile"
-          className="w-48 h-48 bg-gray-300 rounded-full"
+          className="w-48 h-48 rounded-full"
         />
+
         {/* User Description */}
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">User Name</h2>
+          <h2 className="text-2xl font-bold mb-4">
+            {profileData?.name || "User Name"}
+          </h2>
           <p className="text-gray-600">
-            This is a brief description about the user. It can talk about their
-            skills, experiences, and any other relevant information.
+            {profileData?.description ||
+              "This is a brief description about the user. It can talk about their skills, experiences, and any other relevant information."}
           </p>
         </div>
+
         {/* Conditional Button */}
         {profileExists ? (
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+          <button
+            onClick={openProfileFormModal}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          >
             Edit Profile
           </button>
         ) : (
-          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
+          <button
+            onClick={openProfileFormModal}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+          >
             Create Profile
           </button>
         )}

@@ -2,6 +2,7 @@ import { UseMutationResult, useMutation, useQuery } from "react-query";
 import {
   checkProfileExists,
   createProfile,
+  getProfile,
   getProfiles,
 } from "../services/api";
 import { AxiosError, AxiosResponse } from "axios";
@@ -11,11 +12,30 @@ export const useProfiles = () => {
   return useQuery<AxiosResponse<ProfileI[]>, Error>("profiles", getProfiles);
 };
 
+export const useProfile = () => {
+  return useQuery<ProfileI, AxiosError>(
+    "profile",
+    async () => {
+      const response = await getProfile();
+      return response.data;
+    },
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+};
+
 export const useProfileExistence = () => {
-  return useQuery<{ exists: boolean }, Error>("profileExistence", async () => {
-    const response = await checkProfileExists();
-    return response.data;
-  });
+  return useQuery<{ exists: boolean }, Error>(
+    "profileExistence",
+    async () => {
+      const response = await checkProfileExists();
+      return response.data;
+    },
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
 };
 
 export const useCreateProfile = (): UseMutationResult<

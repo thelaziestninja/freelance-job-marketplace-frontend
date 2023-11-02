@@ -44,6 +44,9 @@ export const getProfiles = async (): Promise<AxiosResponse<ProfileI[]>> => {
   const response = await api.get("/profiles");
   return response.data.profiles;
 };
+export const getProfile = async (): Promise<AxiosResponse<ProfileI>> => {
+  return api.get<ProfileI>("/profile");
+};
 
 export const checkProfileExists = async (): Promise<
   AxiosResponse<{ exists: boolean }>
