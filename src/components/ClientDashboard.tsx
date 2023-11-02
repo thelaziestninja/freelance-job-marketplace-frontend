@@ -1,7 +1,6 @@
 import { ProfileI } from "../types";
 import { useAuth } from "../auth/auth";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Profile from "./profiles/Profile";
 import { logout } from "../auth/authService";
 import JobFormModal from "./job/JobFormModal";
@@ -10,9 +9,7 @@ import FloatingActionButton from "./UI/Button";
 import ClientJobList from "./job/ClientJobList";
 import { useProfiles } from "../hooks/useProfiles";
 import ProfileModal from "./profiles/ProfileModal";
-
 import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { useUser } from "../context/user/useUserContext";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -24,7 +21,6 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { userType } = useAuth();
   const { data: profiles } = useProfiles();
-  const { profilePicture } = useUser();
 
   const handleLogout = async () => {
     try {
@@ -55,20 +51,8 @@ const ClientDashboard: React.FC = () => {
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
-      {/* Profile Button and Logout Button */}
+      {/* Logout Button */}
       <div className="flex justify-between items-center p-3">
-        {/* Profile Picture and My Profile Link */}
-        <Link
-          to="/profile"
-          className="flex items-center space-x-2 hover:underline"
-        >
-          <img
-            src={profilePicture}
-            alt="Profile"
-            className="w-8 h-8 rounded-full"
-          />
-          <span className="text-white">My Profile</span>
-        </Link>
         {/* Logout Button */}
         <button
           className="text-white ml-auto mt-3 mr-3 hover:underline"

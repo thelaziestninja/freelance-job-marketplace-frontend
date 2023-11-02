@@ -1,8 +1,16 @@
 import React from "react";
 import { useUser } from "../context/user/useUserContext";
+import { useProfileExistence } from "../hooks/useProfiles";
 
 export const ProfilePage: React.FC = () => {
   const { profilePicture } = useUser();
+  const { data, isLoading } = useProfileExistence();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const profileExists = data?.exists ?? false;
 
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
@@ -22,10 +30,16 @@ export const ProfilePage: React.FC = () => {
             skills, experiences, and any other relevant information.
           </p>
         </div>
-        {/* Edit Button */}
-        <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-          Edit
-        </button>
+        {/* Conditional Button */}
+        {profileExists ? (
+          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+            Edit Profile
+          </button>
+        ) : (
+          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
+            Create Profile
+          </button>
+        )}
       </div>
     </div>
   );
