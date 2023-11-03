@@ -15,10 +15,7 @@ export const useProfiles = () => {
 export const useProfile = () => {
   return useQuery<ProfileI, AxiosError>(
     "profile",
-    async () => {
-      const response = await getProfile();
-      return response.data;
-    },
+    getProfile,
     {
       refetchOnWindowFocus: true,
     }

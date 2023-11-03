@@ -40,7 +40,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             className="rounded-full w-28 h-28"
           />
           <div className="ml-6">
-            <h3 className="text-2xl font-bold">{profile.user}</h3>
+            <h3 className="text-2xl font-bold">{profile.name}</h3>
             <p className="text-lg">{profile.description}</p>
             <h3 className="font-bold">{profile.hourly_rate}$ per hour</h3>
             <div>

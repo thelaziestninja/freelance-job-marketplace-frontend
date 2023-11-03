@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
-import { useProfiles } from "../hooks/useProfiles";
+import { useProfile, useProfiles } from "../hooks/useProfiles";
 import JobList from "./job/FreelanceJobList";
 import { ProfileI } from "../types";
 import Profile from "./profiles/Profile";
@@ -20,6 +20,8 @@ const FreelancerDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { userType } = useAuth();
   const { data: profiles } = useProfiles();
+  const { data: profileData } = useProfile();
+
   const { profilePicture } = useUser();
 
   // console.log("Reviews:", reviews);
@@ -59,7 +61,7 @@ const FreelancerDashboard: React.FC = () => {
           className="flex items-center space-x-2 hover:underline"
         >
           <img
-            src={profilePicture}
+            src={profileData?.imgUrl || profilePicture}
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />

@@ -26,6 +26,12 @@ export const ProfilePage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  console.log("Profile Data:", profileData);
+  console.log("Existence Data:", existenceData);
+  console.log("Using profileData imgUrl:", profileData?.imgUrl);
+  console.log("Profile Image URL:", profileData?.imgUrl);
+  console.log("Profile Picture:", profilePicture);
+
   const profileExists = existenceData?.exists ?? false;
 
   return (
@@ -43,6 +49,7 @@ export const ProfilePage: React.FC = () => {
           src={profileData?.imgUrl || profilePicture}
           alt="Profile"
           className="w-48 h-48 rounded-full"
+          onError={(e) => console.error("Error loading image:", e)}
         />
 
         {/* User Description */}
