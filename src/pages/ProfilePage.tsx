@@ -40,6 +40,7 @@ export const ProfilePage: React.FC = () => {
       <ProfileFormModal
         isOpen={isProfileFormModalOpen}
         onClose={closeProfileFormModal}
+        profile={profileData}
       />
 
       {/* Main Content */}

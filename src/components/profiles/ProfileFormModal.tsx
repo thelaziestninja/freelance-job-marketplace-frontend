@@ -1,49 +1,65 @@
-import React, { useState } from "react";
+import { useQueryClient } from "react-query";
+import React, { useEffect, useState } from "react";
+import { ProfileI, ProfileInput } from "../../types";
 import { useUser } from "../../context/user/useUserContext";
-import { useCreateProfile } from "../../hooks/useProfiles";
-import { ProfileInput } from "../../types";
+import { useCreateProfile, useUpdateProfile } from "../../hooks/useProfiles";
 
 interface ProfileFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  profile?: ProfileI;
 }
 
 const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   isOpen,
   onClose,
+  profile,
 }) => {
   const { profilePicture } = useUser();
   const createProfileMutation = useCreateProfile();
+  const updateProfileMutation = useUpdateProfile();
+  const queryClient = useQueryClient();
 
-  const [skills, setSkills] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [imgUrl, setImgUrl] = useState<string>(profilePicture);
-  const [description, setDescription] = useState<string>("");
-  const [hourlyRate, setHourlyRate] = useState<string>("");
-  const [languages, setLanguages] = useState<string>("");
+  const [formState, setFormState] = useState<ProfileInput>({
+    skills: [],
+    name: "",
+    imgUrl: profilePicture,
+    description: "",
+    hourly_rate: 0,
+    languages: [],
+  });
+
+  useEffect(() => {
+    if (profile) {
+      setFormState({
+        skills: profile.skills,
+        name: profile.name,
+        imgUrl: profile.imgUrl || profilePicture,
+        description: profile.description,
+        hourly_rate: profile.hourly_rate,
+        languages: profile.languages || [],
+      });
+    }
+  }, [profile, profilePicture]);
+
+  const handleChange =
+    (field: keyof ProfileInput) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormState({ ...formState, [field]: event.target.value });
+    };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const skillsArray = skills.split(",").map((skill) => skill.trim());
-    const languagesArray = languages
-      .split(",")
-      .map((language) => language.trim());
-    const hourlyRateNumber = parseFloat(hourlyRate);
-
-    const profileData: ProfileInput = {
-      skills: skillsArray,
-      name,
-      imgUrl,
-      description,
-      hourly_rate: isNaN(hourlyRateNumber) ? 0 : hourlyRateNumber,
-      languages: languagesArray,
-    };
-
     try {
-      await createProfileMutation.mutateAsync(profileData);
+      if (profile) {
+        await updateProfileMutation.mutateAsync(formState);
+      } else {
+        await createProfileMutation.mutateAsync(formState);
+      }
       onClose();
+      queryClient.invalidateQueries("profile");
     } catch (error) {
-      console.error("Error creating profile", error);
+      console.error("Error saving profile", error);
     }
   };
 
@@ -63,60 +79,81 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
         </button>
         <h2 className="text-2xl font-bold mb-6">Create/Edit Profile</h2>
         <form onSubmit={handleSubmit}>
-          {/* Form Fields */}
+          {/* Skills */}
           <label className="block mb-2">
             Skills (comma separated):
             <input
               type="text"
-              value={skills}
-              onChange={(e) => setSkills(e.target.value)}
+              value={formState.skills.join(", ")}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  skills: e.target.value.split(",").map((s) => s.trim()),
+                })
+              }
               className="border p-1 w-full"
             />
           </label>
+
+          {/* Name */}
           <label className="block mb-2">
             Name:
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={formState.name}
+              onChange={handleChange("name")}
               className="border p-1 w-full"
             />
           </label>
+
+          {/* Image URL */}
           <label className="block mb-2">
             Image URL:
             <input
               type="text"
-              value={imgUrl}
-              onChange={(e) => setImgUrl(e.target.value)}
+              value={formState.imgUrl}
+              onChange={handleChange("imgUrl")}
               className="border p-1 w-full"
             />
           </label>
+
+          {/* Description */}
           <label className="block mb-2">
             Description:
             <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formState.description}
+              onChange={handleChange("description")}
               className="border p-1 w-full"
             />
           </label>
+
+          {/* Hourly Rate */}
           <label className="block mb-2">
             Hourly Rate:
             <input
-              type="text"
-              value={hourlyRate}
-              onChange={(e) => setHourlyRate(e.target.value)}
+              type="number"
+              value={formState.hourly_rate}
+              onChange={handleChange("hourly_rate")}
               className="border p-1 w-full"
             />
           </label>
+
+          {/* Languages */}
           <label className="block mb-4">
             Languages (comma separated):
             <input
               type="text"
-              value={languages}
-              onChange={(e) => setLanguages(e.target.value)}
+              value={formState.languages?.join(", ") || ""}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  languages: e.target.value.split(",").map((s) => s.trim()),
+                })
+              }
               className="border p-1 w-full"
             />
           </label>
+
           <button
             type="submit"
             className="bg-dark-pink text-white p-2 rounded hover:bg-custom-coral"

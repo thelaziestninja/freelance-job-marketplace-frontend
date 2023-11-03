@@ -62,6 +62,12 @@ export const createProfile = async (
   return api.post<ProfileI>("/profile", profileData);
 };
 
+export const updateProfile = async (
+  profileData: ProfileInput
+): Promise<AxiosResponse<ProfileI>> => {
+  return api.put<ProfileI>("/profile", profileData);
+};
+
 // Jobs API
 export const getJobs = async (): Promise<JobsResponse> => {
   const response = await api.get<{ jobs: JobI[] }>("/jobs");

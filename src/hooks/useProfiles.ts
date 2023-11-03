@@ -4,6 +4,7 @@ import {
   createProfile,
   getProfile,
   getProfiles,
+  updateProfile,
 } from "../services/api";
 import { AxiosError, AxiosResponse } from "axios";
 import { ProfileI, ProfileInput } from "../types";
@@ -13,13 +14,9 @@ export const useProfiles = () => {
 };
 
 export const useProfile = () => {
-  return useQuery<ProfileI, AxiosError>(
-    "profile",
-    getProfile,
-    {
-      refetchOnWindowFocus: true,
-    }
-  );
+  return useQuery<ProfileI, AxiosError>("profile", getProfile, {
+    refetchOnWindowFocus: true,
+  });
 };
 
 export const useProfileExistence = () => {
@@ -42,5 +39,15 @@ export const useCreateProfile = (): UseMutationResult<
 > => {
   return useMutation<AxiosResponse<ProfileI>, AxiosError, ProfileInput>(
     createProfile
+  );
+};
+
+export const useUpdateProfile = (): UseMutationResult<
+  AxiosResponse<ProfileI>,
+  AxiosError,
+  ProfileInput
+> => {
+  return useMutation<AxiosResponse<ProfileI>, AxiosError, ProfileInput>(
+    updateProfile
   );
 };
