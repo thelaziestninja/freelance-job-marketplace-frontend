@@ -56,9 +56,7 @@ export interface JobI {
 }
 
 export interface JobsResponse {
-  jobs: {
-    jobs: JobI[];
-  };
+  jobs: JobI[];
 }
 
 export interface ApplicationI {

@@ -1,5 +1,6 @@
 import { ProfileI } from "../types";
 import { useAuth } from "../auth/auth";
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Profile from "./profiles/Profile";
 import { logout } from "../auth/authService";
@@ -51,8 +52,16 @@ const ClientDashboard: React.FC = () => {
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
-      {/* Logout Button */}
+      {/* Links and Logout Button */}
       <div className="flex justify-between items-center p-3">
+        {/* View Applications Link */}
+        <Link
+          to="/applications"
+          className="flex items-center space-x-2 hover:underline"
+        >
+          <span className="text-white">View Applications</span>
+        </Link>
+
         {/* Logout Button */}
         <button
           className="text-white ml-auto mt-3 mr-3 hover:underline"
@@ -64,7 +73,7 @@ const ClientDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="grid grid-cols-5 bg-custom-pink p-8 overflow-auto">
-        {/* Jobs you might like */}
+        {/* All jobs*/}
         <div className="col-span-4 bg-dark-pink p-8 rounded-lg">
           <ClientJobList />
         </div>

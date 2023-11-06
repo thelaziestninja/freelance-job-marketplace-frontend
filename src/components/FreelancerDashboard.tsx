@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { ProfileI } from "../types";
+import { useAuth } from "../auth/auth";
+import { Link } from "react-router-dom";
+import Profile from "./profiles/Profile";
+import JobList from "./job/FreelanceJobList";
 import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
-import { useProfile, useProfiles } from "../hooks/useProfiles";
-import JobList from "./job/FreelanceJobList";
-import { ProfileI } from "../types";
-import Profile from "./profiles/Profile";
-import { useAuth } from "../auth/auth";
 import ProfileModal from "./profiles/ProfileModal";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../context/user/useUserContext";
+import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { useProfile, useProfiles } from "../hooks/useProfiles";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);

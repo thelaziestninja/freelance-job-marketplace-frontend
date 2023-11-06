@@ -1,54 +1,85 @@
 import React from "react";
-
-// This is just a placeholder type for an application. You will replace this with your actual data model.
-type Application = {
-  freelancerName: string;
-  freelancerProfilePicture: string;
-  coverLetter: string; // Assuming you might want to display a brief cover letter or something similar.
-};
+import { useMyJobs } from "../hooks/useJobs";
+import { useProfiles } from "../hooks/useProfiles";
+import { useApplications } from "../hooks/useApplication";
+import ApplicationList from "../components/applications/ApplicationList";
 
 export const ApplicationPage: React.FC = () => {
-  // Placeholder data. Replace this with actual data fetched from your backend.
-  const applications: Application[] = [
-    {
-      freelancerName: "John Doe",
-      freelancerProfilePicture: "path_to_image1.jpg",
-      coverLetter: "I'm interested in this job because...",
-    },
-    {
-      freelancerName: "Jane Smith",
-      freelancerProfilePicture: "path_to_image2.jpg",
-      coverLetter: "I believe I am the perfect fit because...",
-    },
-    // ... add more applications as needed
-  ];
+  const myJobsQuery = useMyJobs();
+  const profilesQuery = useProfiles();
 
+  // Debug: Log the jobs data to verify its structure
+  console.log("Jobs Data:", myJobsQuery.data);
+
+  // Since myJobsQuery.data is JobI[], you don't access a .jobs property.
+  const firstJobId = myJobsQuery.data?.jobs?.[0]?._id;
+
+  // Debug: Log the firstJobId to verify its value
+  console.log("First Job ID:", firstJobId);
+
+  // Now use firstJobId to fetch applications
+  const applicationsQuery = useApplications(firstJobId, {
+    // Only enable the query if firstJobId is available and myJobsQuery was successful
+    enabled: !!firstJobId && myJobsQuery.isSuccess,
+  });
+
+  console.log("Applications Data:", applicationsQuery);
+  // Check if anything is loading
+  if (
+    myJobsQuery.isLoading ||
+    applicationsQuery.isLoading ||
+    profilesQuery.isLoading
+  ) {
+    return <div>Loading...</div>; // Add better loading UI as needed
+  }
+
+  // Check if there are any errors
+  if (myJobsQuery.error || applicationsQuery.error || profilesQuery.error) {
+    console.error({
+      myJobsError: myJobsQuery.error,
+      applicationsError: applicationsQuery.error,
+      profilesError: profilesQuery.error,
+    });
+    return (
+      <div>
+        Error fetching data:{" "}
+        {myJobsQuery.error?.message ||
+          applicationsQuery.error?.message ||
+          profilesQuery.error?.message}
+      </div>
+    );
+  }
+  // Debug: Log the fetched data to verify its structure
+
+  console.log("Profiles Data:", profilesQuery.data);
+
+  // Check if there are no applications or no profiles
+  if (
+    !firstJobId ||
+    !applicationsQuery.data ||
+    applicationsQuery.data.length === 0 ||
+    !profilesQuery.data
+  ) {
+    return <div>No applications or profiles found for the selected job.</div>;
+  }
+
+  // Ensure that the profiles data is an array
+  if (!Array.isArray(profilesQuery.data)) {
+    console.error("Profiles data is not an array:", profilesQuery.data);
+    return <div>Error: Profiles data is not in the expected format.</div>;
+  }
+
+  // Pass both applications and profiles arrays to the ApplicationList component
   return (
-    <div className="h-screen bg-custom-pink  flex justify-center items-center p-8">
-      {/* Main Content */}
+    <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
       <div className="w-full max-w-screen-lg bg-white p-8 rounded-lg shadow-md">
-        {/* Applications List */}
-        <ul>
-          {applications.map((application, idx) => (
-            <li key={idx} className="flex items-center space-x-4 mb-6">
-              {/* Freelancer Profile Picture */}
-              <img
-                src={application.freelancerProfilePicture}
-                alt={`${application.freelancerName}'s profile`}
-                className="w-16 h-16 rounded-full"
-              />
-
-              {/* Freelancer Name and Cover Letter */}
-              <div>
-                <h3 className="text-xl font-bold">
-                  {application.freelancerName}
-                </h3>
-                <p className="text-gray-600">{application.coverLetter}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <ApplicationList
+          applications={applicationsQuery.data}
+          profiles={profilesQuery.data}
+        />
       </div>
     </div>
   );
 };
+
+export default ApplicationPage;

@@ -10,7 +10,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { ProfileI, ProfileInput } from "../types";
 
 export const useProfiles = () => {
-  return useQuery<AxiosResponse<ProfileI[]>, Error>("profiles", getProfiles);
+  return useQuery<ProfileI[], Error>("profiles", getProfiles);
 };
 
 export const useProfile = () => {

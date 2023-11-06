@@ -40,9 +40,9 @@ export const registerUser = async (userData: RegisterUserDataI) => {
 };
 
 // Profiles API
-export const getProfiles = async (): Promise<AxiosResponse<ProfileI[]>> => {
-  const response = await api.get("/profiles");
-  return response.data.profiles;
+export const getProfiles = async (): Promise<ProfileI[]> => {
+  const response = await api.get<{ profiles: ProfileI[] }>("/profiles");
+  return response.data.profiles; // Return just the profiles array
 };
 
 export const getProfile = async (): Promise<ProfileI> => {
@@ -70,15 +70,21 @@ export const updateProfile = async (
 
 // Jobs API
 export const getJobs = async (): Promise<JobsResponse> => {
-  const response = await api.get<{ jobs: JobI[] }>("/jobs");
+  const response = await api.get<JobI[]>("/jobs");
   return { jobs: response.data };
 };
 
+export const getMyJobs = async (): Promise<JobI[]> => {
+  const response = await api.get<JobI[]>("/my-jobs");
+  return response.data;
+};
+
 // Applications API
-export const getApplications = async (): Promise<
-  AxiosResponse<ApplicationI[]>
-> => {
-  return api.get<ApplicationI[]>("/applications");
+export const getApplications = async (
+  jobId: string
+): Promise<ApplicationI[]> => {
+  const response = await api.get<ApplicationI[]>(`/job/${jobId}/applications`);
+  return response.data; // Return just the data, not the whole response
 };
 
 export const createApplication = async (
