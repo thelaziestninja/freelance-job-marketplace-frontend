@@ -81,7 +81,7 @@ export const getMyJobs = async (): Promise<JobI[]> => {
 };
 
 export const createJob = async (jobData: CreateJobDataI): Promise<JobI> => {
-  const response = await api.post<JobI>("/jobs", jobData);
+  const response = await api.post<JobI>("/job", jobData);
   return response.data;
 };
 

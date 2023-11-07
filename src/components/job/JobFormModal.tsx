@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useCreateJob } from "../../hooks/useJobs";
 
 interface JobFormModalProps {
   isOpen: boolean;
@@ -11,14 +12,43 @@ const JobFormModal: React.FC<JobFormModalProps> = ({ isOpen, onClose }) => {
   const [budget, setBudget] = useState("");
   const [deadline, setDeadline] = useState("");
 
+  const { mutate: createJob, isLoading, isError, error } = useCreateJob();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // TODO: Send the form data to the server
     console.log({ title, description, budget, deadline });
     onClose(); // Close the modal after submitting
+
+    const jobData = {
+      title,
+      description,
+      budget: Number(budget),
+      deadline: new Date(deadline), // Convert the deadline string to a Date object
+    };
+
+    // Call the mutate function to create a new job
+    createJob(jobData, {
+      onSuccess: () => {
+        onClose(); // Close the modal after submitting
+        // Reset form fields here if necessary
+      },
+      onError: (error) => {
+        // Log the entire error object for more detailed information
+        console.error("Error creating job:", error);
+      },
+    });
   };
 
   if (!isOpen) return null;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError && error instanceof Error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div
