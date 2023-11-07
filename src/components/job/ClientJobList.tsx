@@ -1,7 +1,6 @@
 import React from "react";
 import { useJobs } from "../../hooks/useJobs";
 import ClientJobCard from "./ClientJobCard";
-
 const JobList: React.FC = () => {
   const { data, error, isLoading } = useJobs();
   // console.log("Job data:", data);

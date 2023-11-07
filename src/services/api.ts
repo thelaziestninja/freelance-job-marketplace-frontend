@@ -7,6 +7,7 @@ import {
   JobsResponse,
   RegisterUserDataI,
   ProfileInput,
+  CreateJobDataI,
 } from "../types";
 import axios, { AxiosResponse } from "axios";
 
@@ -76,6 +77,11 @@ export const getJobs = async (): Promise<JobsResponse> => {
 
 export const getMyJobs = async (): Promise<JobI[]> => {
   const response = await api.get<JobI[]>("/my-jobs");
+  return response.data;
+};
+
+export const createJob = async (jobData: CreateJobDataI): Promise<JobI> => {
+  const response = await api.post<JobI>("/jobs", jobData);
   return response.data;
 };
 

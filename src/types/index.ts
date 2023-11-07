@@ -59,6 +59,13 @@ export interface JobsResponse {
   jobs: JobI[];
 }
 
+export interface CreateJobDataI {
+  title: string;
+  description: string;
+  budget: number;
+  deadline: Date;
+}
+
 export interface ApplicationI {
   _id: string;
   job_id: string;
