@@ -23,7 +23,6 @@ export const ApplicationPage: React.FC = () => {
     enabled: !!firstJobId && myJobsQuery.isSuccess,
   });
 
-  console.log("Applications Data:", applicationsQuery);
   // Check if anything is loading
   if (
     myJobsQuery.isLoading ||
@@ -49,15 +48,16 @@ export const ApplicationPage: React.FC = () => {
       </div>
     );
   }
-  // Debug: Log the fetched data to verify its structure
 
+  // Debug: Log the fetched data to verify its structure
   console.log("Profiles Data:", profilesQuery.data);
+  console.log("Applications Data:", applicationsQuery.data);
 
   // Check if there are no applications or no profiles
   if (
     !firstJobId ||
-    !applicationsQuery.data ||
-    applicationsQuery.data.length === 0 ||
+    !Array.isArray(applicationsQuery.data?.applications) || // Check if applications is an array
+    applicationsQuery.data?.applications.length === 0 ||
     !profilesQuery.data
   ) {
     return <div>No applications or profiles found for the selected job.</div>;
@@ -74,7 +74,7 @@ export const ApplicationPage: React.FC = () => {
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
       <div className="w-full max-w-screen-lg bg-white p-8 rounded-lg shadow-md">
         <ApplicationList
-          applications={applicationsQuery.data}
+          applications={applicationsQuery.data.applications} // Assuming the applications are in a property named 'applications'
           profiles={profilesQuery.data}
         />
       </div>

@@ -7,11 +7,9 @@ const ProtectedRoute: React.FC = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // console.log("isAuthenticated:", isAuthenticated);
-  // console.log("userType:", userType);
-
   useEffect(() => {
-    if (isAuthenticated === false) {
+    if (!isAuthenticated) {
+      console.log("Not authenticated, redirecting to login");
       navigate("/login");
     }
   }, [isAuthenticated, navigate]);
@@ -20,6 +18,7 @@ const ProtectedRoute: React.FC = () => {
     return <NoContent />;
   }
 
+  console.log("Rendering Outlet because isAuthenticated is true");
   return <Outlet />;
 };
 
