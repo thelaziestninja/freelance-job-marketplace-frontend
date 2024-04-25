@@ -1,9 +1,9 @@
-import { CreateJobDataI, JobI, JobsResponse } from "../types";
+import { CreateJobDataI, JobI, Jobs } from "../types";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createJob, getJobs, getMyJobs } from "../services/api";
 
 export const useJobs = () => {
-  return useQuery<JobsResponse, Error>("jobs", getJobs);
+  return useQuery<Jobs, Error>("jobs", getJobs);
 };
 
 export const useMyJobs = () => {

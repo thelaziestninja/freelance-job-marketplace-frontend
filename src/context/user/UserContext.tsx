@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useState } from "react";
 
-interface UserContextType {
+export interface UserContextType {
   profilePicture: string;
   setProfilePicture: (url: string) => void;
 }

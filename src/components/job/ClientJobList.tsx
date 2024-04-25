@@ -11,8 +11,8 @@ const JobList: React.FC = () => {
       {isLoading && <div>Loading jobs...</div>}
       {error && <div>Error loading jobs: {error.message}</div>}
       {data &&
-        Array.isArray(data.jobs.jobs) &&
-        data.jobs.jobs.map((job) => <ClientJobCard key={job._id} job={job} />)}
+        Array.isArray(data.jobs) &&
+        data.jobs.map((job) => <ClientJobCard key={job._id} job={job} />)}
     </div>
   );
 };

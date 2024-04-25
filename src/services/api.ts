@@ -4,7 +4,7 @@ import {
   JobI,
   ApplicationI,
   ReviewI,
-  JobsResponse,
+  Jobs,
   RegisterUserDataI,
   ProfileInput,
   CreateJobDataI,
@@ -70,9 +70,9 @@ export const updateProfile = async (
 };
 
 // Jobs API
-export const getJobs = async (): Promise<JobsResponse> => {
-  const response = await api.get<JobI[]>("/jobs");
-  return { jobs: response.data };
+export const getJobs = async (): Promise<Jobs> => {
+  const response = await api.get<Jobs>("/jobs");
+  return response.data;
 };
 
 export const getMyJobs = async (): Promise<JobI[]> => {
