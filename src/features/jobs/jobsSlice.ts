@@ -5,6 +5,13 @@ export const jobsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getJobs: builder.query<JobsResponse, void>({
       query: () => "/jobs",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.jobs.map(({ _id }) => ({ type: "Job" as const, _id })),
+              "Job",
+            ]
+          : ["Job"],
     }),
     getMyJobs: builder.query<JobI[], void>({
       query: () => "/my-jobs",
@@ -15,6 +22,7 @@ export const jobsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: jobData,
       }),
+      invalidatesTags: [{ type: "Job", id: "LIST" }],
     }),
   }),
 });

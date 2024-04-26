@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useCreateJobMutation } from "../../features/jobs/jobsSlice";
+import { isFetchBaseQueryError } from "../../utils/isFetchBaseError";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface JobFormModalProps {
   isOpen: boolean;
@@ -12,37 +14,34 @@ const JobFormModal: React.FC<JobFormModalProps> = ({ isOpen, onClose }) => {
   const [budget, setBudget] = useState("");
   const [deadline, setDeadline] = useState("");
 
-  const {
-    mutate: createJob,
-    isLoading,
-    isError,
-    error,
-  } = useCreateJobMutation();
+  const [createJob, { isLoading, isError, error }] = useCreateJobMutation();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: Send the form data to the server
-    console.log({ title, description, budget, deadline });
-    onClose(); // Close the modal after submitting
 
     const jobData = {
       title,
       description,
       budget: Number(budget),
-      deadline: new Date(deadline), // Convert the deadline string to a Date object
+      deadline: new Date(deadline),
     };
 
-    // Call the mutate function to create a new job
-    createJob(jobData, {
-      onSuccess: () => {
-        onClose(); // Close the modal after submitting
-        // Reset form fields here if necessary
-      },
-      onError: (error) => {
-        // Log the entire error object for more detailed information
+    try {
+      // unwrap the result to handle it as a promise
+      await createJob(jobData).unwrap();
+      // Handle success
+      alert("Job created successfully!");
+      onClose();
+    } catch (error) {
+      if (isFetchBaseQueryError(error as FetchBaseQueryError)) {
+        const fetchError = error as FetchBaseQueryError; // Explicitly type 'error' as 'FetchBaseQueryError'
+        // Handle the error from the server
+        console.error(`Error ${fetchError.status}: ${fetchError.data}`);
+      } else {
+        // Handle client error
         console.error("Error creating job:", error);
-      },
-    });
+      }
+    }
   };
 
   if (!isOpen) return null;
