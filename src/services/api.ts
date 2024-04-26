@@ -6,7 +6,7 @@ import {
   ReviewI,
   JobsResponse,
   RegisterUserDataI,
-  ProfileInput,
+  CteateProfileData,
   CreateJobDataI,
 } from "../types";
 import axios, { AxiosResponse } from "axios";
@@ -58,13 +58,13 @@ export const checkProfileExists = async (): Promise<
 };
 
 export const createProfile = async (
-  profileData: ProfileInput
+  profileData: CteateProfileData
 ): Promise<AxiosResponse<ProfileI>> => {
   return api.post<ProfileI>("/profile", profileData);
 };
 
 export const updateProfile = async (
-  profileData: ProfileInput
+  profileData: CteateProfileData
 ): Promise<AxiosResponse<ProfileI>> => {
   return api.put<ProfileI>("/profile", profileData);
 };

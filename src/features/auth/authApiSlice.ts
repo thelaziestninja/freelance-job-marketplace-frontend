@@ -19,3 +19,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useLoginMutation, useLogoutMutation } = authApiSlice;
+// const selectIsClient = (state) => state.auth.userType === 'client';
+// const selectIsFreelancer = (state) => state.auth.userType === 'freelancer';
+
+// // In your component
+// const isClient = useSelector(selectIsClient);
+// const isFreelancer = useSelector(selectIsFreelancer);
+
+// Use 'isClient' or 'isFreelancer' to conditionally render UI elements

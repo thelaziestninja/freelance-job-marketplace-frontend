@@ -1,6 +1,6 @@
 import { useQueryClient } from "react-query";
 import React, { useEffect, useState } from "react";
-import { ProfileI, ProfileInput } from "../../types";
+import { ProfileI, CteateProfileData } from "../../types";
 import { useUser } from "../../context/user/useUserContext";
 import { useCreateProfile, useUpdateProfile } from "../../hooks/useProfiles";
 
@@ -20,7 +20,7 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   const updateProfileMutation = useUpdateProfile();
   const queryClient = useQueryClient();
 
-  const [formState, setFormState] = useState<ProfileInput>({
+  const [formState, setFormState] = useState<CteateProfileData>({
     skills: [],
     name: "",
     imgUrl: profilePicture,
@@ -43,7 +43,7 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   }, [profile, profilePicture]);
 
   const handleChange =
-    (field: keyof ProfileInput) =>
+    (field: keyof CteateProfileData) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFormState({ ...formState, [field]: event.target.value });
     };

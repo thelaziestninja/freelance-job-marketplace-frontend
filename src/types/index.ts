@@ -37,7 +37,7 @@ export interface ProfileI {
   imgUrl?: string;
 }
 
-export interface ProfileInput {
+export interface CteateProfileData {
   skills: string[];
   name: string;
   imgUrl?: string;
@@ -74,6 +74,11 @@ export interface ApplicationI {
   timestamp: Date;
 }
 
+export interface CreateApplicationDataI {
+  job_id: string;
+  cover_letter: string;
+}
+
 export interface ReviewI {
   _id: string;
   freelancer_id: string;
@@ -81,4 +86,10 @@ export interface ReviewI {
   rating: number;
   review_text: string;
   timestamp: Date;
+}
+
+export interface CreateReviewDataI {
+  freelancer_id: string;
+  rating: number;
+  review_text: string;
 }

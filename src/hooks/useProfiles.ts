@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from "../services/api";
 import { AxiosError, AxiosResponse } from "axios";
-import { ProfileI, ProfileInput } from "../types";
+import { ProfileI, CteateProfileData } from "../types";
 
 export const useProfiles = () => {
   return useQuery<ProfileI[], Error>("profiles", getProfiles);
@@ -35,9 +35,9 @@ export const useProfileExistence = () => {
 export const useCreateProfile = (): UseMutationResult<
   AxiosResponse<ProfileI>,
   AxiosError,
-  ProfileInput
+  CteateProfileData
 > => {
-  return useMutation<AxiosResponse<ProfileI>, AxiosError, ProfileInput>(
+  return useMutation<AxiosResponse<ProfileI>, AxiosError, CteateProfileData>(
     createProfile
   );
 };
@@ -45,9 +45,9 @@ export const useCreateProfile = (): UseMutationResult<
 export const useUpdateProfile = (): UseMutationResult<
   AxiosResponse<ProfileI>,
   AxiosError,
-  ProfileInput
+  CteateProfileData
 > => {
-  return useMutation<AxiosResponse<ProfileI>, AxiosError, ProfileInput>(
+  return useMutation<AxiosResponse<ProfileI>, AxiosError, CteateProfileData>(
     updateProfile
   );
 };
