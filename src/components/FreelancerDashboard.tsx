@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ProfileI } from "../types";
 import Profile from "./profiles/Profile";
 import { useSelector } from "react-redux";
@@ -6,7 +7,6 @@ import {
   useGetProfileQuery,
   useGetProfilesQuery,
 } from "../features/profiles/profilesApiSlice";
-import React, { useEffect, useState } from "react";
 import ProfileModal from "./profiles/ProfileModal";
 import { Link, useNavigate } from "react-router-dom";
 import { selectUserType } from "../features/auth/authSlice";
@@ -18,23 +18,14 @@ const FreelancerDashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const {
-    data: profiles,
-    isLoading: isLoadingProfiles,
-    error: profileError,
-  } = useGetProfilesQuery();
+  const { data: profiles } = useGetProfilesQuery();
   const { data: profileData } = useGetProfileQuery();
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useGetReviewsQuery();
+
   const [logout] = useLogoutMutation();
 
   const userType = useSelector(selectUserType);
-
-  useEffect(() => {
-    if (userType === "client") {
-      navigate("/login");
-    }
-  }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -55,10 +46,6 @@ const FreelancerDashboard: React.FC = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-
-  if (profileError) {
-    return <div>Error loading profiles. Please try again later.</div>;
-  }
 
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
@@ -89,9 +76,9 @@ const FreelancerDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="grid grid-cols-5 bg-custom-pink p-8 overflow-auto">
-        {/* Jobs you might like */}
+        {/* All jobs*/}
         <div className="col-span-4 bg-dark-pink p-8 rounded-lg">
-          {isLoadingProfiles ? <div>Loading profiles...</div> : <JobList />}
+          <JobList />
         </div>
 
         {/* Freelancers */}

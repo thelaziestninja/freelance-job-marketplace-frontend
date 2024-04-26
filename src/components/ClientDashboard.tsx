@@ -18,9 +18,9 @@ const ClientDashboard: React.FC = () => {
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { data: profiles, refetch } = useGetProfilesQuery();
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useGetReviewsQuery();
-  const { data: profiles, refetch } = useGetProfilesQuery();
 
   const [logout] = useLogoutMutation();
 

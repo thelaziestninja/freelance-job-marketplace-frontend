@@ -10,7 +10,7 @@ const JobList: React.FC = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Jobs you might like</h2>
-      {isLoading && <div>Loading jobs...</div>} // add error in the curly braces
+      {isLoading && <div>Loading jobs...</div>}
       {error && (
         <div>
           Error loading jobs:{" "}
