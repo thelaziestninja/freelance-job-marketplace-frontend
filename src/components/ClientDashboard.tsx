@@ -20,7 +20,7 @@ const ClientDashboard: React.FC = () => {
 
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useGetReviewsQuery();
-  const { data: profiles } = useGetProfilesQuery();
+  const { data: profiles, refetch } = useGetProfilesQuery();
 
   const [logout] = useLogoutMutation();
 
@@ -30,6 +30,7 @@ const ClientDashboard: React.FC = () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (logout as any)().unwrap();
+
       console.log("User type after logout:", userType);
       navigate("/");
     } catch (error) {
@@ -52,6 +53,10 @@ const ClientDashboard: React.FC = () => {
 
   const closeJobForm = () => {
     setIsJobFormOpen(false);
+  };
+
+  const handleRefetch = () => {
+    refetch();
   };
 
   return (
@@ -115,7 +120,11 @@ const ClientDashboard: React.FC = () => {
         />
       )}
       <FloatingActionButton onClick={openJobForm} />
-      <JobFormModal isOpen={isJobFormOpen} onClose={closeJobForm} />
+      <JobFormModal
+        isOpen={isJobFormOpen}
+        onClose={closeJobForm}
+        onJobCreated={handleRefetch}
+      />
     </div>
   );
 };

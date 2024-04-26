@@ -9,9 +9,9 @@ export const jobsApiSlice = apiSlice.injectEndpoints({
         result
           ? [
               ...result.jobs.map(({ _id }) => ({ type: "Job" as const, _id })),
-              "Job",
+              { type: "Job", id: "LIST" },
             ]
-          : ["Job"],
+          : [{ type: "Job", id: "LIST" }],
     }),
     getMyJobs: builder.query<JobI[], void>({
       query: () => "/my-jobs",

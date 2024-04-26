@@ -6,9 +6,14 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 interface JobFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onJobCreated: () => void;
 }
 
-const JobFormModal: React.FC<JobFormModalProps> = ({ isOpen, onClose }) => {
+const JobFormModal: React.FC<JobFormModalProps> = ({
+  isOpen,
+  onClose,
+  onJobCreated,
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [budget, setBudget] = useState("");
@@ -29,8 +34,13 @@ const JobFormModal: React.FC<JobFormModalProps> = ({ isOpen, onClose }) => {
     try {
       // unwrap the result to handle it as a promise
       await createJob(jobData).unwrap();
+      setTitle("");
+      setDescription("");
+      setBudget("");
+      setDeadline("");
       // Handle success
       alert("Job created successfully!");
+      onJobCreated();
       onClose();
     } catch (error) {
       if (isFetchBaseQueryError(error as FetchBaseQueryError)) {

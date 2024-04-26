@@ -5,6 +5,10 @@ export const profilesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProfiles: builder.query<ProfileI[], void>({
       query: () => "/profiles",
+      providesTags: (result) =>
+        result
+          ? result.map(({ _id }) => ({ type: "Profile", _id }))
+          : ["Profile"],
     }),
     getProfile: builder.query<ProfileI, void>({
       query: () => `/profile`,
