@@ -40,7 +40,7 @@ const authSlice = createSlice({
       (state, { payload }) => {
         state.user = payload.user;
         state.token = payload.token;
-        state.userType = payload.userType;
+        state.userType = payload.user.user_type;
         state.isAuthenticated = true;
       }
     );
