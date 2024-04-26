@@ -1,31 +1,35 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
-import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Profile from "./profiles/Profile";
-import { logout } from "../auth/authService";
+import { useSelector } from "react-redux";
 import JobFormModal from "./job/JobFormModal";
-import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "./UI/Button";
 import ClientJobList from "./job/ClientJobList";
-import { useProfiles } from "../hooks/useProfiles";
 import ProfileModal from "./profiles/ProfileModal";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { Link, useNavigate } from "react-router-dom";
+import { selectUserType } from "../features/auth/authSlice";
+import { useLogoutMutation } from "../features/auth/authApiSlice";
+import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
+import { useGetProfilesQuery } from "../features/profiles/profilesApiSlice";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useReviewsByFreelancer(selectedProfile?._id ?? "");
-  const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { userType } = useAuth();
-  const { data: profiles } = useProfiles();
+
+  const { data: reviewsData, isLoading: isLoadingReviews } =
+    useGetReviewsQuery();
+  const { data: profiles } = useGetProfilesQuery();
+
+  const [logout] = useLogoutMutation();
+
+  const userType = useSelector(selectUserType);
 
   const handleLogout = async () => {
     try {
-      await logout();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (logout as any)().unwrap();
       console.log("User type after logout:", userType);
       navigate("/");
     } catch (error) {
@@ -104,7 +108,7 @@ const ClientDashboard: React.FC = () => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviews}
+          reviews={reviewsData || []}
           isLoadingReviews={isLoadingReviews}
           isOpen={modalOpen}
           onClose={handleCloseModal}

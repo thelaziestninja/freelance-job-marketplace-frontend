@@ -1,40 +1,45 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
-import { Link } from "react-router-dom";
 import Profile from "./profiles/Profile";
+import { useSelector } from "react-redux";
 import JobList from "./job/FreelanceJobList";
-import { logout } from "../auth/authService";
-import { useNavigate } from "react-router-dom";
-import ProfileModal from "./profiles/ProfileModal";
+import {
+  useGetProfileQuery,
+  useGetProfilesQuery,
+} from "../features/profiles/profilesApiSlice";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../context/user/useUserContext";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { useProfile, useProfiles } from "../hooks/useProfiles";
+import ProfileModal from "./profiles/ProfileModal";
+import { Link, useNavigate } from "react-router-dom";
+import { selectUserType } from "../features/auth/authSlice";
+import { useLogoutMutation } from "../features/auth/authApiSlice";
+import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useReviewsByFreelancer(selectedProfile?._id ?? "");
-  const reviews = reviewsData?.data ?? [];
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { userType } = useAuth();
-  const { data: profiles } = useProfiles();
-  const { data: profileData } = useProfile();
 
-  const { profilePicture } = useUser();
+  const {
+    data: profiles,
+    isLoading: isLoadingProfiles,
+    error: profileError,
+  } = useGetProfilesQuery();
+  const { data: profileData } = useGetProfileQuery();
+  const { data: reviewsData, isLoading: isLoadingReviews } =
+    useGetReviewsQuery();
+  const [logout] = useLogoutMutation();
 
-  // console.log("Reviews:", reviews);
+  const userType = useSelector(selectUserType);
 
   useEffect(() => {
     if (userType === "client") {
       navigate("/login");
     }
-  }, [userType, navigate, profiles]);
+  }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {
-      await logout();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (logout as any)().unwrap();
       console.log("User type after logout:", userType);
       navigate("/");
     } catch (error) {
@@ -51,9 +56,13 @@ const FreelancerDashboard: React.FC = () => {
     setModalOpen(false);
   };
 
+  if (profileError) {
+    return <div>Error loading profiles. Please try again later.</div>;
+  }
+
   return (
     <div className="h-screen bg-custom-pink flex flex-col">
-      {/* Profile Button and Logout Button */}
+      {/* Profile and Logout Buttons */}
       <div className="flex justify-between items-center p-3">
         {/* Profile Picture and My Profile Link */}
         <Link
@@ -61,13 +70,15 @@ const FreelancerDashboard: React.FC = () => {
           className="flex items-center space-x-2 hover:underline"
         >
           <img
-            src={profileData?.imgUrl || profilePicture}
+            src={
+              profileData?.imgUrl ||
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU"
+            }
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />
           <span className="text-white">My Profile</span>
         </Link>
-        {/* Logout Button */}
         <button
           className="text-white ml-auto mt-3 mr-3 hover:underline"
           onClick={handleLogout}
@@ -80,7 +91,7 @@ const FreelancerDashboard: React.FC = () => {
       <div className="grid grid-cols-5 bg-custom-pink p-8 overflow-auto">
         {/* Jobs you might like */}
         <div className="col-span-4 bg-dark-pink p-8 rounded-lg">
-          <JobList />
+          {isLoadingProfiles ? <div>Loading profiles...</div> : <JobList />}
         </div>
 
         {/* Freelancers */}
@@ -109,7 +120,7 @@ const FreelancerDashboard: React.FC = () => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviews}
+          reviews={reviewsData || []}
           isLoadingReviews={isLoadingReviews}
           isOpen={modalOpen}
           onClose={handleCloseModal}

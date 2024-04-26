@@ -1,10 +1,10 @@
-import { USER_TYPE } from "../types";
 import React, { useState } from "react";
-import { useRegister } from "../hooks/useUsers";
+import { RegisterUserDataI } from "../types";
 import Label from "../components/registration/Label";
 import { Link, useNavigate } from "react-router-dom";
 import businessPepe from "../assets/businesspepe.png";
 import InputField from "../components/registration/InputField";
+import { useRegisterUserMutation } from "../features/users/usersApiSlice";
 
 type FormData = {
   username: string;
@@ -16,7 +16,7 @@ type FormData = {
 };
 
 export const RegisterPage: React.FC = () => {
-  const registerMutation = useRegister();
+  const [registerUser] = useRegisterUserMutation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -33,30 +33,60 @@ export const RegisterPage: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  // const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   try {
+  //     e.preventDefault();
+  //     if (formData.password !== formData.confirmPassword) {
+  //       return alert("Passwords do not match");
+  //     }
+  //     await registerUser({
+  //       username: formData.username,
+  //       email: formData.email,
+  //       password: formData.password,
+  //       user_type: formData.userType,
+  //     }).unwrap();
+  //     alert("Registration successful");
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.error("Registration error", error);
+  //     if (error instanceof Error) {
+  //       alert(error.message || "An unknown error occurred");
+  //     }
+  //   }
+  // };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword)
-      return alert("Passwords do not match");
-    registerMutation.mutate(
-      {
-        username: formData.username,
-        password: formData.password,
-        email: formData.email,
-        user_type: formData.userType as USER_TYPE,
-      },
-      {
-        onSuccess: () => {
-          alert("Registration successful");
-          navigate("/login");
-        },
-        onError: (error: { message?: string } | unknown) => {
-          alert(
-            (error as { message?: string }).message ||
-              "An unknown error occurred"
-          );
-        },
+    const { username, email, password, confirmPassword, userType } = formData;
+
+    // Basic client-side validation
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (!username || !email || !password || !userType) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    const userData: RegisterUserDataI = {
+      username,
+      email,
+      password,
+      user_type: userType as "freelancer" | "client",
+    };
+
+    try {
+      await registerUser(userData).unwrap();
+      alert("Registration successful");
+      navigate("/login");
+    } catch (error) {
+      console.error("Registration error", error);
+      if (error instanceof Error) {
+        alert(error.message || "An unknown error occurred");
       }
-    );
+    }
   };
 
   return (

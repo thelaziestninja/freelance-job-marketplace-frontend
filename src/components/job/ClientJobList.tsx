@@ -1,8 +1,8 @@
 import React from "react";
-import { useJobs } from "../../hooks/useJobs";
 import ClientJobCard from "./ClientJobCard";
+import { useGetJobsQuery } from "../../features/jobs/jobsSlice";
 const JobList: React.FC = () => {
-  const { data, error, isLoading } = useJobs();
+  const { data, error, isLoading } = useGetJobsQuery();
   // console.log("Job data:", data);
 
   return (

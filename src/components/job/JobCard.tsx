@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { JobI } from "../../types";
-import { useApplyJob } from "../../hooks/useApplication";
+import { useCreateApplicationMutation } from "../../features/applications/applicationsSlice";
 
 const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
   const [coverLetter, setCoverLetter] = useState("");
   const [isApplying, setIsApplying] = useState(false);
-  const applyJob = useApplyJob();
+  const [applyJob, { isLoading }] = useCreateApplicationMutation();
+
   const applyBoxRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -24,7 +25,7 @@ const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
 
   const handleApplyNow = async () => {
     try {
-      await applyJob.mutateAsync({ jobId: job._id, coverLetter });
+      await applyJob({ job_id: job._id, cover_letter: coverLetter }).unwrap();
       alert("Application submitted successfully!");
       setIsApplying(false);
       setCoverLetter("");
@@ -50,8 +51,9 @@ const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
             <button
               className="bg-custom-coral text-white px-1 py-1 rounded w-1/6"
               onClick={handleApplyNow}
+              disabled={isLoading}
             >
-              Apply
+              {isLoading ? "Applying..." : "Apply"}
             </button>
           </div>
         ) : (

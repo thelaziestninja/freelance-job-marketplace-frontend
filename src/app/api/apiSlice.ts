@@ -3,7 +3,7 @@ import {
   setCredentials,
   clearCredentials,
 } from "../../features/auth/authSlice";
-import { RootState } from "./store";
+import { RootState } from "../store";
 import {
   BaseQueryFn,
   FetchArgs,

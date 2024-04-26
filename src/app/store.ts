@@ -1,10 +1,10 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from "./api/apiSlice";
 import storage from "redux-persist/lib/storage";
-import authReducer from "../../features/auth/authSlice";
+import authReducer from "../features/auth/authSlice";
 import { persistReducer, persistStore } from "redux-persist";
-import profileReducer from "../../features/profiles/profileSlice";
+import profileReducer from "../features/profiles/profileSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import notificationReducer from "../../features/notification/notificationSlice";
+import notificationReducer from "../features/notification/notificationSlice";
 
 const persistConfig = {
   key: "root",

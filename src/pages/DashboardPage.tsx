@@ -1,8 +1,10 @@
 import React from "react";
-import { useAuth } from "../auth/auth";
+import { useSelector } from "react-redux";
 import NoContent from "../components/NoContent";
 import ClientDashboard from "../components/ClientDashboard";
+
 import FreelancerDashboard from "../components/FreelancerDashboard";
+import { selectUserType } from "../features/auth/authSlice";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,
@@ -10,7 +12,7 @@ const ComponentMap = {
 };
 
 export const DashboardPage: React.FC = () => {
-  const { userType } = useAuth();
+  const userType = useSelector(selectUserType);
   console.log("User Type:", userType);
 
   const Component = userType ? ComponentMap[userType] : NoContent;

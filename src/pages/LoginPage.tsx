@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/auth";
 import businessPepe from "../assets/businesspepe.png";
+import { useLoginMutation } from "../features/auth/authApiSlice";
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const [login, { isLoading, isError }] = useLoginMutation();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await login(username, password);
-      // alert("Login Successful!");
+      // Call the login mutation with the username and password
+      await login({ username, password });
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error", error);
@@ -56,23 +57,30 @@ export const LoginPage: React.FC = () => {
             />
           </div>
 
+          {/* Error Message */}
+          {isError && (
+            <p className="text-red-500 text-center">
+              Login failed. Please check your username and password.
+            </p>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
             className="w-full p-2 bg-custom-coral text-white rounded-md hover:bg-dark-pink transition duration-300"
           >
-            Log In
+            {isLoading ? "Logging in..." : "Log In"}
           </button>
         </form>
 
         {/* Forgot Password and Signup Link */}
         <div className="flex flex-col mt-4 text-center">
-          <Link
+          {/* <Link
             to="/forgot-password"
             className="text-blue-500 hover:underline mb-2"
           >
             Forgot Password?
-          </Link>
+          </Link> */}
           <div>
             New here?{" "}
             <Link to="/register" className="text-blue-500 hover:underline">

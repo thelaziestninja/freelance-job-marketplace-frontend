@@ -1,11 +1,9 @@
-export type UserType = "freelancer" | "client";
-
 export interface UserI {
   //excluded the hashed password for security reasons
   _id: string;
   username: string;
   email: string;
-  user_type: UserType;
+  user_type: "freelancer" | "client";
 }
 
 export interface LoginResponseI {
@@ -23,7 +21,7 @@ export interface RegisterUserDataI {
   username: string;
   email: string;
   password: string;
-  user_type: UserType;
+  user_type: "freelancer" | "client";
 }
 
 export interface ProfileI {

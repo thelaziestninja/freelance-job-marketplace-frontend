@@ -1,82 +1,68 @@
-import React from "react";
-import { useMyJobs } from "../hooks/useJobs";
-import { useProfiles } from "../hooks/useProfiles";
-import { useApplications } from "../hooks/useApplication";
+import { ProfileI } from "../types";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { selectUserType } from "../features/auth/authSlice";
+import { useGetMyJobsQuery } from "../features/jobs/jobsSlice";
+import { useGetProfileQuery } from "../features/profiles/profilesApiSlice";
 import ApplicationList from "../components/applications/ApplicationList";
+import { useGetApplicationsQuery } from "../features/applications/applicationsSlice";
 
 export const ApplicationPage: React.FC = () => {
-  const myJobsQuery = useMyJobs();
-  const profilesQuery = useProfiles();
+  const navigate = useNavigate();
+  const userType = useSelector(selectUserType);
+
+  const {
+    data: myJobsData,
+    isLoading: isLoadingJobs,
+    isError: isJobsError,
+  } = useGetMyJobsQuery();
+
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications,
+  } = useGetApplicationsQuery();
+
+  const {
+    data: profilesData,
+    isLoading: isLoadingProfiles,
+    isError: isProfilesError,
+  } = useGetProfileQuery();
 
   // Debug: Log the jobs data to verify its structure
-  console.log("Jobs Data:", myJobsQuery.data);
+  console.log("Jobs Data:", myJobsData);
+  console.log("Profiles Data:", profilesData);
 
-  // Since myJobsQuery.data is JobI[], you don't access a .jobs property.
-  const firstJobId = myJobsQuery.data?.jobs?.[0]?._id;
+  useEffect(() => {
+    if (userType !== "freelancer") {
+      navigate("/login");
+    }
+  }, [userType, navigate]);
 
-  // Debug: Log the firstJobId to verify its value
-  console.log("First Job ID:", firstJobId);
+  if (isLoadingJobs || isLoadingProfiles || isLoadingApplications) {
+    return <div>Loading...</div>;
+  }
 
-  // Now use firstJobId to fetch applications
-  const applicationsQuery = useApplications(firstJobId, {
-    // Only enable the query if firstJobId is available and myJobsQuery was successful
-    enabled: !!firstJobId && myJobsQuery.isSuccess,
-  });
+  if (isJobsError || isProfilesError || isErrorApplications) {
+    return <div>Error fetching data.</div>;
+  }
 
-  // Check if anything is loading
   if (
-    myJobsQuery.isLoading ||
-    applicationsQuery.isLoading ||
-    profilesQuery.isLoading
+    !applications ||
+    applications.length === 0 ||
+    !profilesData ||
+    !myJobsData
   ) {
-    return <div>Loading...</div>; // Add better loading UI as needed
+    return <div>No data found.</div>;
   }
 
-  // Check if there are any errors
-  if (myJobsQuery.error || applicationsQuery.error || profilesQuery.error) {
-    console.error({
-      myJobsError: myJobsQuery.error,
-      applicationsError: applicationsQuery.error,
-      profilesError: profilesQuery.error,
-    });
-    return (
-      <div>
-        Error fetching data:{" "}
-        {myJobsQuery.error?.message ||
-          applicationsQuery.error?.message ||
-          profilesQuery.error?.message}
-      </div>
-    );
-  }
+  const profiles: ProfileI[] = profilesData ? [profilesData] : [];
 
-  // Debug: Log the fetched data to verify its structure
-  console.log("Profiles Data:", profilesQuery.data);
-  console.log("Applications Data:", applicationsQuery.data);
-
-  // Check if there are no applications or no profiles
-  if (
-    !firstJobId ||
-    !Array.isArray(applicationsQuery.data?.applications) || // Check if applications is an array
-    applicationsQuery.data?.applications.length === 0 ||
-    !profilesQuery.data
-  ) {
-    return <div>No applications or profiles found for the selected job.</div>;
-  }
-
-  // Ensure that the profiles data is an array
-  if (!Array.isArray(profilesQuery.data)) {
-    console.error("Profiles data is not an array:", profilesQuery.data);
-    return <div>Error: Profiles data is not in the expected format.</div>;
-  }
-
-  // Pass both applications and profiles arrays to the ApplicationList component
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
       <div className="w-full max-w-screen-lg bg-white p-8 rounded-lg shadow-md">
-        <ApplicationList
-          applications={applicationsQuery.data.applications} // Assuming the applications are in a property named 'applications'
-          profiles={profilesQuery.data}
-        />
+        <ApplicationList applications={applications} profiles={profiles} />
       </div>
     </div>
   );

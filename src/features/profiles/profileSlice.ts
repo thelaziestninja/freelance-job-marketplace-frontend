@@ -1,3 +1,4 @@
+import { RootState } from "../../app/store";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface UserProfileState {
@@ -19,5 +20,9 @@ export const profileSlice = createSlice({
   },
 });
 
+export const selectProfilePicture = (state: RootState) =>
+  state.profile.profilePicture;
+
 export const { setProfilePicture } = profileSlice.actions;
+
 export default profileSlice.reducer;

@@ -6,7 +6,7 @@ export const profilesApiSlice = apiSlice.injectEndpoints({
     getProfiles: builder.query<ProfileI[], void>({
       query: () => "/profiles",
     }),
-    getProfile: builder.query<ProfileI, string>({
+    getProfile: builder.query<ProfileI, void>({
       query: () => `/profile`,
     }),
     createProfile: builder.mutation<ProfileI, CteateProfileData>({

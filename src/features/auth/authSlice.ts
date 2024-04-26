@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApiSlice } from "./authApiSlice";
+import { RootState } from "../../app/store";
 
-const initialState = {
+interface AuthState {
+  user: { username: string; email: string } | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  userType: "freelancer" | "client" | null;
+}
+
+const initialState: AuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
+  userType: null,
 };
 
 const authSlice = createSlice({
@@ -12,14 +21,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { user, token } = action.payload;
+      const { user, token, userType } = action.payload;
       state.user = user;
       state.token = token;
+      state.userType = userType;
       state.isAuthenticated = true;
     },
     clearCredentials: (state) => {
       state.user = null;
       state.token = null;
+      state.userType = null;
       state.isAuthenticated = false;
     },
   },
@@ -29,6 +40,7 @@ const authSlice = createSlice({
       (state, { payload }) => {
         state.user = payload.user;
         state.token = payload.token;
+        state.userType = payload.userType;
         state.isAuthenticated = true;
       }
     );
@@ -37,6 +49,7 @@ const authSlice = createSlice({
       (state) => {
         state.user = null;
         state.token = null;
+        state.userType = null;
         state.isAuthenticated = false;
       }
     );
@@ -44,4 +57,7 @@ const authSlice = createSlice({
 });
 
 export const { setCredentials, clearCredentials } = authSlice.actions;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.isAuthenticated;
+export const selectUserType = (state: RootState) => state.auth.userType;
 export default authSlice.reducer;

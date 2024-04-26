@@ -1,37 +1,48 @@
+import { ProfileI } from "../types";
 import React, { useState } from "react";
-import { useUser } from "../context/user/useUserContext";
-import { useProfile, useProfileExistence } from "../hooks/useProfiles";
+import { useSelector } from "react-redux";
+import {
+  useCheckProfileExistsQuery,
+  useCreateProfileMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "../features/profiles/profilesApiSlice";
 import ProfileFormModal from "../components/profiles/ProfileFormModal";
-import { useQueryClient } from "react-query";
+import { selectProfilePicture } from "../features/profiles/profileSlice";
 
 export const ProfilePage: React.FC = () => {
-  const { profilePicture } = useUser();
-  const { data: existenceData, isLoading: isLoadingExistence } =
-    useProfileExistence();
-  const { data: profileData, isLoading: isLoadingProfile } = useProfile();
-
+  const profilePicture = useSelector(selectProfilePicture);
   const [isProfileFormModalOpen, setIsProfileFormModalOpen] = useState(false);
-  const queryClient = useQueryClient();
 
+  const { data: profileData, isLoading: isLoadingProfile } =
+    useGetProfileQuery();
+  const { data: existenceData, isLoading: isLoadingExistence } =
+    useCheckProfileExistsQuery();
+
+  const [createProfile] = useCreateProfileMutation();
+  const [updateProfile] = useUpdateProfileMutation();
+
+  // const user = useSelector(selectUser); // If you need user details
   const openProfileFormModal = () => {
     setIsProfileFormModalOpen(true);
   };
 
   const closeProfileFormModal = () => {
     setIsProfileFormModalOpen(false);
-    queryClient.invalidateQueries("profileExistence");
+  };
+
+  const handleProfileSave = async (profile: ProfileI) => {
+    if (existenceData?.exists) {
+      await updateProfile(profile);
+    } else {
+      await createProfile(profile);
+    }
+    closeProfileFormModal();
   };
 
   if (isLoadingExistence || isLoadingProfile) {
     return <div>Loading...</div>;
   }
-
-  console.log("Profile Data:", profileData);
-  console.log("Existence Data:", existenceData);
-  console.log("Using profileData imgUrl:", profileData?.imgUrl);
-  console.log("Profile Image URL:", profileData?.imgUrl);
-  console.log("Profile Picture:", profilePicture);
-
   const profileExists = existenceData?.exists ?? false;
 
   return (
@@ -41,6 +52,7 @@ export const ProfilePage: React.FC = () => {
         isOpen={isProfileFormModalOpen}
         onClose={closeProfileFormModal}
         profile={profileData}
+        onSave={handleProfileSave}
       />
 
       {/* Main Content */}

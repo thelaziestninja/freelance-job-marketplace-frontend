@@ -1,10 +1,11 @@
 import NoContent from "../components/NoContent";
-import { AuthContext } from "../auth/AuthContext";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
+import { selectIsAuthenticated } from "../features/auth/authSlice";
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const navigate = useNavigate();
 
   useEffect(() => {

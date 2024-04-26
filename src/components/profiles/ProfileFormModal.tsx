@@ -1,24 +1,30 @@
-import { useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import {
+  useCreateProfileMutation,
+  useUpdateProfileMutation,
+} from "../../features/profiles/profilesApiSlice";
 import React, { useEffect, useState } from "react";
 import { ProfileI, CteateProfileData } from "../../types";
-import { useUser } from "../../context/user/useUserContext";
-import { useCreateProfile, useUpdateProfile } from "../../hooks/useProfiles";
 
 interface ProfileFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile?: ProfileI;
+  onSave?: (profile: ProfileI) => void;
 }
 
 const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   isOpen,
   onClose,
   profile,
+  // onUpdateProfile,
 }) => {
-  const { profilePicture } = useUser();
-  const createProfileMutation = useCreateProfile();
-  const updateProfileMutation = useUpdateProfile();
-  const queryClient = useQueryClient();
+  const profilePicture = useSelector(
+    (state: RootState) => state.profile.profilePicture
+  );
+  const [createProfileMutation] = useCreateProfileMutation();
+  const [updateProfileMutation] = useUpdateProfileMutation();
 
   const [formState, setFormState] = useState<CteateProfileData>({
     skills: [],
@@ -52,12 +58,12 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
     event.preventDefault();
     try {
       if (profile) {
-        await updateProfileMutation.mutateAsync(formState);
+        await updateProfileMutation({ ...profile, ...formState });
       } else {
-        await createProfileMutation.mutateAsync(formState);
+        await createProfileMutation(formState).unwrap();
       }
       onClose();
-      queryClient.invalidateQueries("profile");
+      //here we need to invalidate the queries
     } catch (error) {
       console.error("Error saving profile", error);
     }

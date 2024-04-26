@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCreateJob } from "../../hooks/useJobs";
+import { useCreateJobMutation } from "../../features/jobs/jobsSlice";
 
 interface JobFormModalProps {
   isOpen: boolean;
@@ -12,7 +12,12 @@ const JobFormModal: React.FC<JobFormModalProps> = ({ isOpen, onClose }) => {
   const [budget, setBudget] = useState("");
   const [deadline, setDeadline] = useState("");
 
-  const { mutate: createJob, isLoading, isError, error } = useCreateJob();
+  const {
+    mutate: createJob,
+    isLoading,
+    isError,
+    error,
+  } = useCreateJobMutation();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
