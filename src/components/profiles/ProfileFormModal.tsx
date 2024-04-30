@@ -1,8 +1,9 @@
 import { useQueryClient } from "react-query";
 import React, { useEffect, useState } from "react";
 import { ProfileI, ProfileInput } from "../../types";
-import { useUser } from "../../context/user/useUserContext";
 import { useCreateProfile, useUpdateProfile } from "../../hooks/useProfiles";
+import { useAtom } from "jotai";
+import { userAtom } from "../../state/userAtoms";
 
 interface ProfileFormModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   onClose,
   profile,
 }) => {
-  const { profilePicture } = useUser();
+  const [{ profilePicture }] = useAtom(userAtom);
   const createProfileMutation = useCreateProfile();
   const updateProfileMutation = useUpdateProfile();
   const queryClient = useQueryClient();

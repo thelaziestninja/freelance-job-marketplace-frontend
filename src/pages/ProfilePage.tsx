@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useUser } from "../context/user/useUserContext";
 import { useProfile, useProfileExistence } from "../hooks/useProfiles";
 import ProfileFormModal from "../components/profiles/ProfileFormModal";
 import { useQueryClient } from "react-query";
+import { useAtom } from "jotai";
+import { userAtom } from "../state/userAtoms";
 
 export const ProfilePage: React.FC = () => {
-  const { profilePicture } = useUser();
+  const [{ profilePicture }] = useAtom(userAtom);
   const { data: existenceData, isLoading: isLoadingExistence } =
     useProfileExistence();
   const { data: profileData, isLoading: isLoadingProfile } = useProfile();

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileModal from "./profiles/ProfileModal";
 import React, { useEffect, useState } from "react";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { useProfile } from "../hooks/useProfiles";
+import { useProfiles, useProfile } from "../hooks/useProfiles";
 import { authAtom, logoutAtom } from "../state/authAtoms";
 import { useAtom } from "jotai";
 import { userAtom } from "../state/userAtoms";
@@ -21,7 +21,7 @@ const FreelancerDashboard: React.FC = () => {
   const [{ userType }] = useAtom(authAtom);
   const [{ profilePicture }] = useAtom(userAtom);
   const [, logout] = useAtom(logoutAtom);
-  const { data: profiles } = useProfile();
+  const { data: profiles } = useProfiles();
   const { data: profileData } = useProfile();
 
   useEffect(() => {
