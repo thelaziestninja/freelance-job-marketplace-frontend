@@ -1,10 +1,11 @@
+import { useAtom } from "jotai";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/auth";
 import businessPepe from "../assets/businesspepe.png";
+import { loginAtom } from "../state/authAtoms";
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const [, login] = useAtom(loginAtom);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await login(username, password);
+      await login({ username, password });
       // alert("Login Successful!");
       navigate("/dashboard");
     } catch (error) {

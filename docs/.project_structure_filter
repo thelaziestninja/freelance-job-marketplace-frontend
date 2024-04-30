@@ -1,0 +1,86 @@
+--- Folder Structure ---
+.eslintrc.cjs
+[.git]
+[public]
+    └── businesspepe.png
+    README.md
+[src]
+    ├── App.css
+    ├── App.tsx
+    ├── [assets]
+        └── businessPepe.png
+    ├── [auth]
+        ├── auth.ts
+        ├── AuthContext.tsx
+        └── authService.ts
+    ├── [components]
+        ├── [applications]
+            └── ApplicationList.tsx
+        ├── ClientDashboard.tsx
+        ├── FreelancerDashboard.tsx
+        ├── [job]
+            ├── ClientJobCard.tsx
+            ├── ClientJobList.tsx
+            ├── FreelanceJobList.tsx
+            ├── JobCard.tsx
+            └── JobFormModal.tsx
+        ├── NoContent.tsx
+        ├── [profiles]
+            ├── Profile.tsx
+            ├── ProfileFormModal.tsx
+            └── ProfileModal.tsx
+        ├── [registration]
+            ├── InputField.tsx
+            └── Label.tsx
+        └── [UI]
+            ├── Button.tsx
+            ├── Footer.tsx
+            ├── Header.tsx
+            └── Notification.tsx
+    ├── [context]
+        ├── GenericContext.tsx
+        ├── [notification]
+            ├── NotificationContext.tsx
+            └── useNotificationContext.ts
+        └── [user]
+            ├── UserContext.tsx
+            └── useUserContext.ts
+    ├── [hooks]
+        ├── useApplication.ts
+        ├── useJobs.ts
+        ├── useProfiles.ts
+        ├── useReviews.ts
+        └── useUsers.ts
+    ├── index.css
+    ├── main.tsx
+    ├── [pages]
+        ├── ApplicationPage.tsx
+        ├── DashboardPage.tsx
+        ├── HomePage.tsx
+        ├── index.ts
+        ├── LoginPage.tsx
+        ├── ProfilePage.tsx
+        └── RegisterPage.tsx
+    ├── [routes]
+        ├── AppRoutes.tsx
+        └── ProtectedRoute.tsx
+    ├── [services]
+        └── api.ts
+    ├── [styles]
+        ├── scrollbar.css
+        └── tailwind.css
+    ├── [types]
+        ├── application.ts
+        ├── index.ts
+        ├── job.ts
+        ├── profile.ts
+        ├── requests.ts
+        ├── review.ts
+        └── user.ts
+    └── vite-env.d.ts
+tailwind.config.js
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+
+--- File Contents ---

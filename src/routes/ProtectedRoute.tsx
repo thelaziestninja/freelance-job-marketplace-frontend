@@ -1,10 +1,11 @@
+import { useAtom } from "jotai";
 import NoContent from "../components/NoContent";
-import { AuthContext } from "../auth/AuthContext";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
+import { authAtom } from "../state/authAtoms";
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const [{ isAuthenticated }] = useAtom(authAtom);
   const navigate = useNavigate();
 
   useEffect(() => {

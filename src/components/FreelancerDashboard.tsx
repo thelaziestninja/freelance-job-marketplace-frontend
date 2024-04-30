@@ -1,15 +1,15 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
 import { Link } from "react-router-dom";
 import Profile from "./profiles/Profile";
 import JobList from "./job/FreelanceJobList";
-import { logout } from "../auth/authService";
 import { useNavigate } from "react-router-dom";
 import ProfileModal from "./profiles/ProfileModal";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../context/user/useUserContext";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { useProfile, useProfiles } from "../hooks/useProfiles";
+import { useProfile } from "../hooks/useProfiles";
+import { authAtom, logoutAtom } from "../state/authAtoms";
+import { useAtom } from "jotai";
+import { userAtom } from "../state/userAtoms";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -18,19 +18,17 @@ const FreelancerDashboard: React.FC = () => {
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { userType } = useAuth();
-  const { data: profiles } = useProfiles();
+  const [{ userType }] = useAtom(authAtom);
+  const [{ profilePicture }] = useAtom(userAtom);
+  const [, logout] = useAtom(logoutAtom);
+  const { data: profiles } = useProfile();
   const { data: profileData } = useProfile();
-
-  const { profilePicture } = useUser();
-
-  // console.log("Reviews:", reviews);
 
   useEffect(() => {
     if (userType === "client") {
       navigate("/login");
     }
-  }, [userType, navigate, profiles]);
+  }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {

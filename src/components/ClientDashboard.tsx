@@ -1,9 +1,7 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Profile from "./profiles/Profile";
-import { logout } from "../auth/authService";
 import JobFormModal from "./job/JobFormModal";
 import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "./UI/Button";
@@ -11,6 +9,8 @@ import ClientJobList from "./job/ClientJobList";
 import { useProfiles } from "../hooks/useProfiles";
 import ProfileModal from "./profiles/ProfileModal";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { useAtom } from "jotai";
+import { authAtom, logoutAtom } from "../state/authAtoms";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -20,7 +20,8 @@ const ClientDashboard: React.FC = () => {
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { userType } = useAuth();
+  const [{ userType }] = useAtom(authAtom);
+  const [, logout] = useAtom(logoutAtom);
   const { data: profiles } = useProfiles();
 
   const handleLogout = async () => {

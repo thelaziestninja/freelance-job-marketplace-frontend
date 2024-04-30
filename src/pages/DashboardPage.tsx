@@ -1,8 +1,9 @@
 import React from "react";
-import { useAuth } from "../auth/auth";
 import NoContent from "../components/NoContent";
 import ClientDashboard from "../components/ClientDashboard";
 import FreelancerDashboard from "../components/FreelancerDashboard";
+import { useAtom } from "jotai";
+import { authAtom } from "../state/authAtoms";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,
@@ -10,7 +11,7 @@ const ComponentMap = {
 };
 
 export const DashboardPage: React.FC = () => {
-  const { userType } = useAuth();
+  const [{ userType }] = useAtom(authAtom);
   console.log("User Type:", userType);
 
   const Component = userType ? ComponentMap[userType] : NoContent;
