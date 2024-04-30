@@ -2,25 +2,12 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/user";
 
-export const setToken = (token: string) => {
-  // console.log("Token before setting to session storage:", token);
-  sessionStorage.setItem("token", token);
-};
-
 export const getToken = () => {
   return sessionStorage.getItem("token");
 };
 
 export const removeToken = () => {
   sessionStorage.removeItem("token");
-};
-
-export const setUserType = (userType: "client" | "freelancer") => {
-  sessionStorage.setItem("userType", userType);
-};
-
-export const getUserType = () => {
-  return sessionStorage.getItem("userType") as "client" | "freelancer";
 };
 
 export const removeUserType = () => {
@@ -37,7 +24,6 @@ export const login = async (username: string, password: string) => {
     // console.log("Type of token:", typeof response.data.token);
     const token = response.data.token;
     const userType = response.data.user.user_type as "client" | "freelancer";
-    //in services we shouldnt add any logic
     return { token, userType };
   } catch (error) {
     console.error("Login error", error);
