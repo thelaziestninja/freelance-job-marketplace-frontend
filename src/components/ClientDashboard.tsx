@@ -1,9 +1,8 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import Profile from "./profiles/Profile";
-import { logout } from "../auth/authService";
+import { logout } from "../services/auth/authService";
 import JobFormModal from "./job/JobFormModal";
 import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "./UI/Button";
@@ -11,8 +10,10 @@ import ClientJobList from "./job/ClientJobList";
 import { useProfiles } from "../hooks/useProfiles";
 import ProfileModal from "./profiles/ProfileModal";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
+import { authStore } from "../stores/authStore";
+import { observer } from "mobx-react-lite";
 
-const ClientDashboard: React.FC = () => {
+const ClientDashboard: React.FC = observer(() => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
@@ -20,7 +21,7 @@ const ClientDashboard: React.FC = () => {
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { userType } = useAuth();
+  const { userType } = authStore;
   const { data: profiles } = useProfiles();
 
   const handleLogout = async () => {
@@ -114,6 +115,6 @@ const ClientDashboard: React.FC = () => {
       <JobFormModal isOpen={isJobFormOpen} onClose={closeJobForm} />
     </div>
   );
-};
+});
 
 export default ClientDashboard;

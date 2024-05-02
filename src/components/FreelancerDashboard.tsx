@@ -1,28 +1,28 @@
 import { ProfileI } from "../types";
-import { useAuth } from "../auth/auth";
 import { Link } from "react-router-dom";
 import Profile from "./profiles/Profile";
 import JobList from "./job/FreelanceJobList";
-import { logout } from "../auth/authService";
+import { logout } from "../services/auth/authService";
 import { useNavigate } from "react-router-dom";
 import ProfileModal from "./profiles/ProfileModal";
 import React, { useEffect, useState } from "react";
-import { useUser } from "../context/user/useUserContext";
 import { useReviewsByFreelancer } from "../hooks/useReviews";
-import { useProfile, useProfiles } from "../hooks/useProfiles";
+import { useProfiles } from "../hooks/useProfiles";
+import { authStore } from "../stores/authStore";
+import { observer } from "mobx-react-lite";
+import { userStore } from "../stores/userStore";
 
-const FreelancerDashboard: React.FC = () => {
+const FreelancerDashboard: React.FC = observer(() => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useReviewsByFreelancer(selectedProfile?._id ?? "");
-  const reviews = reviewsData?.data ?? [];
-  const navigate = useNavigate();
-  const { userType } = useAuth();
-  const { data: profiles } = useProfiles();
-  const { data: profileData } = useProfile();
 
-  const { profilePicture } = useUser();
+  const navigate = useNavigate();
+
+  const { data: reviewsData, isLoading: isLoadingReviews } =
+    useReviewsByFreelancer(userStore.profile?._id ?? "");
+  const reviews = reviewsData?.data ?? [];
+  const { userType } = authStore;
+  const { data: profiles } = useProfiles();
 
   // console.log("Reviews:", reviews);
 
@@ -61,7 +61,7 @@ const FreelancerDashboard: React.FC = () => {
           className="flex items-center space-x-2 hover:underline"
         >
           <img
-            src={profileData?.imgUrl || profilePicture}
+            src={userStore.profile?.imgUrl || userStore.profilePicture}
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />
@@ -117,6 +117,6 @@ const FreelancerDashboard: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default FreelancerDashboard;

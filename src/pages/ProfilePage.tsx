@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useUser } from "../context/user/useUserContext";
+import { userStore } from "../stores/userStore";
 import { useProfile, useProfileExistence } from "../hooks/useProfiles";
 import ProfileFormModal from "../components/profiles/ProfileFormModal";
 import { useQueryClient } from "react-query";
 
 export const ProfilePage: React.FC = () => {
-  const { profilePicture } = useUser();
   const { data: existenceData, isLoading: isLoadingExistence } =
     useProfileExistence();
   const { data: profileData, isLoading: isLoadingProfile } = useProfile();
@@ -30,7 +29,7 @@ export const ProfilePage: React.FC = () => {
   console.log("Existence Data:", existenceData);
   console.log("Using profileData imgUrl:", profileData?.imgUrl);
   console.log("Profile Image URL:", profileData?.imgUrl);
-  console.log("Profile Picture:", profilePicture);
+  console.log("Profile Picture:", userStore.profilePicture);
 
   const profileExists = existenceData?.exists ?? false;
 
@@ -47,7 +46,7 @@ export const ProfilePage: React.FC = () => {
       <div className="w-full max-w-screen-md bg-white p-8 rounded-lg shadow-md flex flex-col items-center space-y-8">
         {/* User Profile Photo */}
         <img
-          src={profileData?.imgUrl || profilePicture}
+          src={profileData?.imgUrl || userStore.profilePicture}
           alt="Profile"
           className="w-48 h-48 rounded-full"
           onError={(e) => console.error("Error loading image:", e)}

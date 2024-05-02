@@ -1,7 +1,7 @@
 import { useQueryClient } from "react-query";
 import React, { useEffect, useState } from "react";
 import { ProfileI, ProfileInput } from "../../types";
-import { useUser } from "../../context/user/useUserContext";
+import { userStore } from "../../stores/userStore";
 import { useCreateProfile, useUpdateProfile } from "../../hooks/useProfiles";
 
 interface ProfileFormModalProps {
@@ -15,7 +15,6 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   onClose,
   profile,
 }) => {
-  const { profilePicture } = useUser();
   const createProfileMutation = useCreateProfile();
   const updateProfileMutation = useUpdateProfile();
   const queryClient = useQueryClient();
@@ -23,7 +22,7 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   const [formState, setFormState] = useState<ProfileInput>({
     skills: [],
     name: "",
-    imgUrl: profilePicture,
+    imgUrl: userStore.profilePicture,
     description: "",
     hourly_rate: 0,
     languages: [],
@@ -34,13 +33,13 @@ const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
       setFormState({
         skills: profile.skills,
         name: profile.name,
-        imgUrl: profile.imgUrl || profilePicture,
+        imgUrl: profile.imgUrl || userStore.profilePicture,
         description: profile.description,
         hourly_rate: profile.hourly_rate,
         languages: profile.languages || [],
       });
     }
-  }, [profile, profilePicture]);
+  }, [profile, userStore.profilePicture]);
 
   const handleChange =
     (field: keyof ProfileInput) =>

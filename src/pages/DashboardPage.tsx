@@ -1,17 +1,19 @@
 import React from "react";
-import { useAuth } from "../auth/auth";
+
 import NoContent from "../components/NoContent";
 import ClientDashboard from "../components/ClientDashboard";
 import FreelancerDashboard from "../components/FreelancerDashboard";
+import { observer } from "mobx-react-lite";
+import { authStore } from "../stores/authStore";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,
   client: ClientDashboard,
 };
 
-export const DashboardPage: React.FC = () => {
-  const { userType } = useAuth();
-  console.log("User Type:", userType);
+export const DashboardPage: React.FC = observer(() => {
+  const { userType } = authStore;
+  console.log("User Type:", authStore.userType);
 
   const Component = userType ? ComponentMap[userType] : NoContent;
 
@@ -20,4 +22,4 @@ export const DashboardPage: React.FC = () => {
       <Component />
     </div>
   );
-};
+});

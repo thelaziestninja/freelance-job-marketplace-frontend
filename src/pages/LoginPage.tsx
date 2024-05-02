@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/auth";
 import businessPepe from "../assets/businesspepe.png";
+import { observer } from "mobx-react-lite";
+import { authStore } from "../stores/authStore";
 
-export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+export const LoginPage: React.FC = observer(() => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await login(username, password);
+      await authStore.login(username, password);
       // alert("Login Successful!");
       navigate("/dashboard");
     } catch (error) {
@@ -89,4 +89,4 @@ export const LoginPage: React.FC = () => {
       />
     </div>
   );
-};
+});

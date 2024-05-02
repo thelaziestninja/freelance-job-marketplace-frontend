@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "../src/styles/tailwind.css";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
+import { Provider } from "mobx-react";
+import { authStore } from "../src/stores/authStore";
+import { userStore } from "../src/stores/userStore";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
+  <Provider authStore={authStore} userStore={userStore}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </QueryClientProvider>
+  </Provider>
 );
