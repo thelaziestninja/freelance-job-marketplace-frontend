@@ -1,17 +1,17 @@
 import { ProfileI } from "../types";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Profile from "./profiles/Profile";
-import { logout } from "../services/auth/authService";
+import { observer } from "mobx-react-lite";
 import JobFormModal from "./job/JobFormModal";
 import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "./UI/Button";
 import ClientJobList from "./job/ClientJobList";
-import { useProfiles } from "../hooks/useProfiles";
-import ProfileModal from "./profiles/ProfileModal";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
 import { authStore } from "../stores/authStore";
-import { observer } from "mobx-react-lite";
+import { userStore } from "../stores/userStore";
+import ProfileModal from "./profiles/ProfileModal";
+import { logout } from "../services/auth/authService";
+import { useReviewsByFreelancer } from "../hooks/useReviews";
 
 const ClientDashboard: React.FC = observer(() => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -22,7 +22,16 @@ const ClientDashboard: React.FC = observer(() => {
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
   const { userType } = authStore;
-  const { data: profiles } = useProfiles();
+  const { profiles } = userStore;
+
+  useEffect(() => {
+    if (userType === "freelancer") {
+      navigate("/login");
+    }
+    if (userStore.profiles.length === 0) {
+      userStore.loadProfiles();
+    }
+  }, [userType, navigate]);
 
   const handleLogout = async () => {
     try {

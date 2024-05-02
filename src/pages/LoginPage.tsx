@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import businessPepe from "../assets/businesspepe.png";
 import { observer } from "mobx-react-lite";
 import { authStore } from "../stores/authStore";
+import { Link, useNavigate } from "react-router-dom";
+import businessPepe from "../assets/businesspepe.png";
 
 export const LoginPage: React.FC = observer(() => {
   const [username, setUsername] = useState("");

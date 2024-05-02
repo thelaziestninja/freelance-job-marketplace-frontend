@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import ClientJobCard from "./ClientJobCard";
 import { jobStore } from "../../stores/jobStore";
 
 const JobList: React.FC = observer(() => {
+  useEffect(() => {
+    jobStore.loadJobs();
+  }, []);
+
   const { jobs, error, isLoading } = jobStore;
   // console.log("Jobs:", jobs);
 

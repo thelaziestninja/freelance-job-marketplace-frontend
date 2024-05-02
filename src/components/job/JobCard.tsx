@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
 import { JobI } from "../../types";
 import { useApplyJob } from "../../hooks/useApplication";
+import React, { useState, useRef, useEffect } from "react";
 
 const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
   const [coverLetter, setCoverLetter] = useState("");

@@ -1,25 +1,63 @@
 import { makeAutoObservable } from "mobx";
-import { getProfile, registerUser } from "../services/api";
-import { ProfileI, RegisterUserDataI } from "types";
+import { getProfile, getProfiles, registerUser } from "../services/api";
+import { ApiError, ProfileI, RegisterUserDataI } from "types";
+import { isErrorWithMessage } from "../utils/isErrorWithMessage";
 
 class UserStore {
+  profiles: ProfileI[] = [];
+  isProfilesLoading: boolean = false;
+  profile: ProfileI | null = null;
+  isProfileLoading: boolean = false;
+  userStoreError: ApiError | null = null;
   profilePicture: string =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU";
-  profile: ProfileI | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
   loadProfile = async (): Promise<void> => {
+    this.isProfileLoading = true;
     try {
       const data = await getProfile();
       if (data) {
         this.profile = data;
         this.profilePicture = data.imgUrl || "";
       }
-    } catch (error) {
-      console.error("Failed to load profile:", error);
+    } catch (error: unknown) {
+      if (isErrorWithMessage(error)) {
+        this.userStoreError = {
+          message: error.message,
+          statusCode: error.statusCode,
+        };
+      } else {
+        this.userStoreError = {
+          message: "An unknown error occurred",
+        };
+      }
+    } finally {
+      this.isProfileLoading = false;
+    }
+  };
+
+  loadProfiles = async (): Promise<void> => {
+    this.isProfilesLoading = true;
+    try {
+      const response = await getProfiles();
+      this.profiles = response;
+    } catch (error: unknown) {
+      if (isErrorWithMessage(error)) {
+        this.userStoreError = {
+          message: error.message,
+          statusCode: error.statusCode,
+        };
+      } else {
+        this.userStoreError = {
+          message: "An unknown error occurred",
+        };
+      }
+    } finally {
+      this.isProfilesLoading = false;
     }
   };
 
