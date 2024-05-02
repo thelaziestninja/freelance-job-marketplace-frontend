@@ -19,7 +19,7 @@ class AuthStore {
     this.isAuthenticated = !!this.token;
   };
 
-  login = async (username: string, password: string) => {
+  login = async (username: string, password: string): Promise<void> => {
     const data = await AuthService.login(username, password);
     this.token = data.token;
     this.userType = data.userType;
@@ -28,7 +28,7 @@ class AuthStore {
     sessionStorage.setItem("userType", data.userType);
   };
 
-  logout = async () => {
+  logout = async (): Promise<void> => {
     await AuthService.logout();
     this.token = undefined;
     this.userType = undefined;

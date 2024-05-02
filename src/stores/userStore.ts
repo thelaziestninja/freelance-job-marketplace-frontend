@@ -11,7 +11,7 @@ class UserStore {
     makeAutoObservable(this);
   }
 
-  async loadProfile() {
+  loadProfile = async (): Promise<void> => {
     try {
       const data = await getProfile();
       if (data) {
@@ -21,13 +21,13 @@ class UserStore {
     } catch (error) {
       console.error("Failed to load profile:", error);
     }
-  }
+  };
 
   setProfilePicture = (url: string) => {
     this.profilePicture = url;
   };
 
-  async register(userData: RegisterUserDataI) {
+  register = async (userData: RegisterUserDataI): Promise<void> => {
     try {
       const response = await registerUser(userData);
       console.log("Registration successful", response);
@@ -35,7 +35,7 @@ class UserStore {
       console.error("Failed to register:", error);
       throw error;
     }
-  }
+  };
 }
 
 export const userStore = new UserStore();
