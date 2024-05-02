@@ -1,6 +1,7 @@
 import { USER_TYPE } from "../types";
 import React, { useState } from "react";
-import { useRegister } from "../hooks/useUsers";
+import { observer } from "mobx-react-lite";
+import { userStore } from "../stores/userStore";
 import Label from "../components/registration/Label";
 import { Link, useNavigate } from "react-router-dom";
 import businessPepe from "../assets/businesspepe.png";
@@ -15,8 +16,7 @@ type FormData = {
   [key: string]: string; // This is the index signature
 };
 
-export const RegisterPage: React.FC = () => {
-  const registerMutation = useRegister();
+export const RegisterPage: React.FC = observer(() => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -35,28 +35,22 @@ export const RegisterPage: React.FC = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword)
       return alert("Passwords do not match");
-    registerMutation.mutate(
-      {
-        username: formData.username,
-        password: formData.password,
-        email: formData.email,
-        user_type: formData.userType as USER_TYPE,
-      },
-      {
-        onSuccess: () => {
-          alert("Registration successful");
-          navigate("/login");
-        },
-        onError: (error: { message?: string } | unknown) => {
-          alert(
-            (error as { message?: string }).message ||
-              "An unknown error occurred"
-          );
-        },
-      }
-    );
+    const userData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      user_type: formData.userType as USER_TYPE,
+    };
+    try {
+      await userStore.register(userData);
+      alert("Registration successful");
+      navigate("/login");
+    } catch (error) {
+      alert("Failed to register. Please try again.");
+    }
   };
 
   return (
@@ -119,4 +113,4 @@ export const RegisterPage: React.FC = () => {
       </div>
     </div>
   );
-};
+});

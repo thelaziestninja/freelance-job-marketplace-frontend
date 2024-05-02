@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import { getProfile } from "../services/api";
-import { ProfileI } from "types";
+import { getProfile, registerUser } from "../services/api";
+import { ProfileI, RegisterUserDataI } from "types";
 
 class UserStore {
   profilePicture: string =
@@ -26,6 +26,16 @@ class UserStore {
   setProfilePicture = (url: string) => {
     this.profilePicture = url;
   };
+
+  async register(userData: RegisterUserDataI) {
+    try {
+      const response = await registerUser(userData);
+      console.log("Registration successful", response);
+    } catch (error) {
+      console.error("Failed to register:", error);
+      throw error;
+    }
+  }
 }
 
 export const userStore = new UserStore();
