@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
 import { JobI } from "../../types";
+import React, { useState, useRef, useEffect } from "react";
 import { useCreateApplicationMutation } from "../../features/applications/applicationsSlice";
 
 const JobCard: React.FC<{ job: JobI }> = ({ job }) => {

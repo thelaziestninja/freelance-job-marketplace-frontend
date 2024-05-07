@@ -76,6 +76,10 @@ export interface ApplicationI {
   timestamp: Date;
 }
 
+export interface ApplicationsI {
+  applications: ApplicationI[];
+}
+
 export interface CreateApplicationDataI {
   job_id: string;
   cover_letter: string;
@@ -88,6 +92,9 @@ export interface ReviewI {
   rating: number;
   review_text: string;
   timestamp: Date;
+}
+export interface ReviewsI {
+  reviews: ReviewI[];
 }
 
 export interface CreateReviewDataI {

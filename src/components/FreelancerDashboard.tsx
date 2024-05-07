@@ -11,7 +11,7 @@ import ProfileModal from "./profiles/ProfileModal";
 import { Link, useNavigate } from "react-router-dom";
 import { selectUserType } from "../features/auth/authSlice";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
-// import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
+import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -20,8 +20,12 @@ const FreelancerDashboard: React.FC = () => {
 
   const { data: profiles } = useGetProfilesQuery();
   const { data: profileData } = useGetProfileQuery();
-  // const { data: reviewsData, isLoading: isLoadingReviews } =
-  //   useGetReviewsQuery();
+
+  // Fetch reviews when a profile is selected
+  const { data: reviewsData, isLoading: isLoadingReviews } = useGetReviewsQuery(
+    { freelancer_id: selectedProfile?._id || "" },
+    { skip: !selectedProfile } // Only run the query when a profile is selected
+  );
 
   const [logout] = useLogoutMutation();
 
@@ -107,8 +111,8 @@ const FreelancerDashboard: React.FC = () => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={[]}
-          isLoadingReviews={false}
+          reviews={reviewsData?.reviews || []} // Fix: Access the 'reviews' property of 'reviewsData' or use an empty array as fallback
+          isLoadingReviews={isLoadingReviews}
           isOpen={modalOpen}
           onClose={handleCloseModal}
         />

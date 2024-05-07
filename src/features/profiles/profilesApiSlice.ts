@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { ProfileI, CteateProfileData, ProfilesI } from "../../types";
+import { ProfileI, ProfilesI, CteateProfileData } from "../../types";
 
 export const profilesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

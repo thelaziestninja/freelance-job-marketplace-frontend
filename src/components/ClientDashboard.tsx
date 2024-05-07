@@ -18,12 +18,13 @@ const ClientDashboard: React.FC = () => {
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
   const navigate = useNavigate();
 
-  const { data: profiles, refetch, error } = useGetProfilesQuery();
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useGetReviewsQuery();
+  const { data: profiles, refetch } = useGetProfilesQuery();
 
-  console.log("Profiles", profiles);
-  console.log("Profiles error", error);
+  // Fetch reviews when a profile is selected
+  const { data: reviewsData, isLoading: isLoadingReviews } = useGetReviewsQuery(
+    { freelancer_id: selectedProfile?._id || "" },
+    { skip: !selectedProfile } // Only run the query when a profile is selected
+  );
 
   const [logout] = useLogoutMutation();
 
@@ -116,7 +117,7 @@ const ClientDashboard: React.FC = () => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviewsData || []}
+          reviews={reviewsData?.reviews || []}
           isLoadingReviews={isLoadingReviews}
           isOpen={modalOpen}
           onClose={handleCloseModal}

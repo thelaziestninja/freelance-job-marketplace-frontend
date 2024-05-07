@@ -1,6 +1,6 @@
 import React from "react";
 import { ApplicationI, ProfileI } from "../../types";
-import { useGetMyApplicationsQuery } from "../../features/applications/applicationsSlice";
+import { useGetApplicationsQuery } from "../../features/applications/applicationsSlice";
 import { useGetProfilesQuery } from "../../features/profiles/profilesApiSlice";
 
 type ApplicationListProps = {
@@ -13,7 +13,7 @@ const ApplicationList: React.FC<ApplicationListProps> = () => {
     data: applications,
     isLoading: isLoadingApplications,
     isError: isErrorApplications,
-  } = useGetMyApplicationsQuery();
+  } = useGetApplicationsQuery();
   const {
     data: profiles,
     isLoading: isLoadingProfiles,

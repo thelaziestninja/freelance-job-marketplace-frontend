@@ -50,7 +50,7 @@ export const ApplicationPage: React.FC = () => {
 
   if (
     !applications ||
-    applications.length === 0 ||
+    applications.applications.length === 0 ||
     !profilesData ||
     !myJobsData
   ) {
@@ -62,7 +62,10 @@ export const ApplicationPage: React.FC = () => {
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
       <div className="w-full max-w-screen-lg bg-white p-8 rounded-lg shadow-md">
-        <ApplicationList applications={applications} profiles={profiles} />
+        <ApplicationList
+          applications={applications.applications}
+          profiles={profiles}
+        />
       </div>
     </div>
   );

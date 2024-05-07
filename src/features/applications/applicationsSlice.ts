@@ -1,26 +1,28 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { ApplicationI, CreateApplicationDataI } from "../../types";
+import {
+  ApplicationI,
+  ApplicationsI,
+  CreateApplicationDataI,
+} from "../../types";
 
 export const applicationsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getApplications: builder.query<ApplicationI[], void>({
-      query: () => "/applications",
-    }),
-    getMyApplications: builder.query<ApplicationI[], void>({
-      query: () => "/my-applications",
+    getApplications: builder.query<ApplicationsI, { job_id: string }>({
+      query: ({ job_id }) => `/job/${job_id}/applications`,
+      providesTags: (result) =>
+        result?.applications
+          ? result.applications.map(({ _id }) => ({ type: "Application", _id }))
+          : ["Application"],
     }),
     createApplication: builder.mutation<ApplicationI, CreateApplicationDataI>({
-      query: (applicationData) => ({
-        url: "/application",
+      query: ({ job_id, cover_letter }) => ({
+        url: `/job/${job_id}/apply`,
         method: "POST",
-        body: applicationData,
+        body: { cover_letter },
       }),
     }),
   }),
 });
 
-export const {
-  useGetApplicationsQuery,
-  useGetMyApplicationsQuery,
-  useCreateApplicationMutation,
-} = applicationsApiSlice;
+export const { useGetApplicationsQuery, useCreateApplicationMutation } =
+  applicationsApiSlice;
