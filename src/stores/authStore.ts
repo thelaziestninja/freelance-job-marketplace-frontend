@@ -1,3 +1,4 @@
+import { userStore } from "./userStore";
 import { makeAutoObservable } from "mobx";
 import * as AuthService from "../services/auth/authService";
 
@@ -29,12 +30,17 @@ class AuthStore {
   };
 
   logout = async (): Promise<void> => {
-    await AuthService.logout();
-    this.token = undefined;
-    this.userType = undefined;
-    this.isAuthenticated = false;
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userType");
+    try {
+      await AuthService.logout();
+      this.token = undefined;
+      this.userType = undefined;
+      this.isAuthenticated = false;
+      userStore.resetProfile();
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userType");
+    } catch (error) {
+      console.error("Logout error", error);
+    }
   };
 }
 

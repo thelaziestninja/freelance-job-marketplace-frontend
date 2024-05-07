@@ -1,6 +1,12 @@
 import { makeAutoObservable } from "mobx";
-import { getProfile, getProfiles, registerUser } from "../services/api";
-import { ApiError, ProfileI, RegisterUserDataI } from "types";
+import {
+  createProfile,
+  getProfile,
+  getProfiles,
+  registerUser,
+  updateProfile,
+} from "../services/api";
+import { ApiError, ProfileI, ProfileInput, RegisterUserDataI } from "types";
 import { isErrorWithMessage } from "../utils/isErrorWithMessage";
 
 class UserStore {
@@ -27,16 +33,7 @@ class UserStore {
         this.profileExists = !!data;
       }
     } catch (error: unknown) {
-      if (isErrorWithMessage(error)) {
-        this.userStoreError = {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      } else {
-        this.userStoreError = {
-          message: "An unknown error occurred",
-        };
-      }
+      this.handleApiError(error);
     } finally {
       this.isProfileLoading = false;
     }
@@ -48,23 +45,40 @@ class UserStore {
       const response = await getProfiles();
       this.profiles = response;
     } catch (error: unknown) {
-      if (isErrorWithMessage(error)) {
-        this.userStoreError = {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      } else {
-        this.userStoreError = {
-          message: "An unknown error occurred",
-        };
-      }
+      this.handleApiError(error);
     } finally {
       this.isProfilesLoading = false;
     }
   };
 
-  setProfilePicture = (url: string) => {
-    this.profilePicture = url;
+  createProfile = async (profileData: ProfileInput): Promise<void> => {
+    try {
+      const { data } = await createProfile(profileData);
+      this.profile = data;
+    } catch (error: unknown) {
+      this.handleApiError(error);
+    } finally {
+      this.loadProfile();
+    }
+  };
+
+  updateProfile = async (profileData: ProfileInput): Promise<void> => {
+    try {
+      const { data } = await updateProfile(profileData);
+      this.profile = data;
+    } catch (error: unknown) {
+      this.handleApiError(error);
+    } finally {
+      this.loadProfile();
+    }
+  };
+
+  resetProfile = () => {
+    this.profile = null;
+    this.profilePicture =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU";
+    this.isProfileLoading = false;
+    this.userStoreError = null;
   };
 
   register = async (userData: RegisterUserDataI): Promise<void> => {
@@ -76,6 +90,22 @@ class UserStore {
       throw error;
     }
   };
-}
 
+  handleApiError = (error: unknown) => {
+    if (isErrorWithMessage(error)) {
+      this.userStoreError = {
+        message: error.message,
+        statusCode: error.statusCode,
+      };
+    } else {
+      this.userStoreError = {
+        message: "An unknown error occurred",
+      };
+    }
+  };
+
+  setProfilePicture = (url: string) => {
+    this.profilePicture = url;
+  };
+}
 export const userStore = new UserStore();
