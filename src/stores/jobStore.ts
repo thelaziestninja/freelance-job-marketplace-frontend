@@ -1,7 +1,12 @@
 import { makeAutoObservable } from "mobx";
-import { ApiError, ApplicationI, JobI } from "types";
+import { ApiError, ApplicationI, CreateJobDataI, JobI } from "types";
 import { isErrorWithMessage } from "../utils/isErrorWithMessage";
-import { getApplications, getJobs, getMyJobs } from "../services/api";
+import {
+  createJob,
+  getApplications,
+  getJobs,
+  getMyJobs,
+} from "../services/api";
 
 class JobStore {
   jobs: JobI[] = [];
@@ -23,16 +28,7 @@ class JobStore {
       //   console.log("API response:", response);
       this.jobs = response.jobs;
     } catch (error: unknown) {
-      if (isErrorWithMessage(error)) {
-        this.jobStoreError = {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      } else {
-        this.jobStoreError = {
-          message: "An unknown error occurred",
-        };
-      }
+      this.handleApiError(error);
     } finally {
       this.isJobsLoading = false;
     }
@@ -45,18 +41,19 @@ class JobStore {
       console.log("API response:", response);
       this.myJobs = response;
     } catch (error: unknown) {
-      if (isErrorWithMessage(error)) {
-        this.jobStoreError = {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      } else {
-        this.jobStoreError = {
-          message: "An unknown error occurred",
-        };
-      }
+      this.handleApiError(error);
     } finally {
       this.isJobsLoading = false;
+    }
+  };
+
+  createJob = async (jobData: CreateJobDataI): Promise<void> => {
+    try {
+      const newJob = await createJob(jobData);
+      this.jobs.push(newJob);
+      this.myJobs.push(newJob);
+    } catch (error: unknown) {
+      this.handleApiError(error);
     }
   };
 
@@ -66,18 +63,22 @@ class JobStore {
       const response = await getApplications(jobId);
       this.applications = response;
     } catch (error: unknown) {
-      if (isErrorWithMessage(error)) {
-        this.jobStoreError = {
-          message: error.message,
-          statusCode: error.statusCode,
-        };
-      } else {
-        this.jobStoreError = {
-          message: "An unknown error occurred",
-        };
-      }
+      this.handleApiError(error);
     } finally {
       this.isApplicationsLoading = false;
+    }
+  };
+
+  handleApiError = (error: unknown) => {
+    if (isErrorWithMessage(error)) {
+      this.jobStoreError = {
+        message: error.message,
+        statusCode: error.statusCode,
+      };
+    } else {
+      this.jobStoreError = {
+        message: "An unknown error occurred",
+      };
     }
   };
 }

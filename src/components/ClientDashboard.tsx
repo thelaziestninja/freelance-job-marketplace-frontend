@@ -21,22 +21,21 @@ const ClientDashboard: React.FC = observer(() => {
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { userType } = authStore;
   const { profiles } = userStore;
 
   useEffect(() => {
-    if (userType === "freelancer") {
+    if (authStore.userType === "freelancer") {
       navigate("/login");
     }
     if (userStore.profiles.length === 0) {
       userStore.loadProfiles();
     }
-  }, [userType, navigate]);
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      console.log("User type after logout:", userType);
+      console.log("User type after logout:", authStore.userType);
       navigate("/");
     } catch (error) {
       console.error("Logout error", error);

@@ -20,22 +20,22 @@ const FreelancerDashboard: React.FC = observer(() => {
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useReviewsByFreelancer(userStore.profile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
-  const { userType } = authStore;
   const { profiles } = userStore;
 
   useEffect(() => {
-    if (userType === "client") {
+    if (authStore.userType === "client") {
       navigate("/login");
     }
     if (userStore.profiles.length === 0) {
       userStore.loadProfiles();
     }
-  }, [userType, navigate, profiles]);
+    userStore.loadProfile();
+  }, [navigate, profiles]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      console.log("User type after logout:", userType);
+      console.log("User type after logout:", authStore.userType);
       navigate("/");
     } catch (error) {
       console.error("Logout error", error);
