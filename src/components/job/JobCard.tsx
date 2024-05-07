@@ -1,11 +1,12 @@
 import { JobI } from "../../types";
-import { useApplyJob } from "../../hooks/useApplication";
+import { observer } from "mobx-react-lite";
+import { jobStore } from "../../stores/jobStore";
 import React, { useState, useRef, useEffect } from "react";
 
-const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
+const JobCard: React.FC<{ job: JobI }> = observer(({ job }) => {
   const [coverLetter, setCoverLetter] = useState("");
   const [isApplying, setIsApplying] = useState(false);
-  const applyJob = useApplyJob();
+
   const applyBoxRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -24,7 +25,7 @@ const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
 
   const handleApplyNow = async () => {
     try {
-      await applyJob.mutateAsync({ jobId: job._id, coverLetter });
+      await jobStore.applyJob(job._id, coverLetter);
       alert("Application submitted successfully!");
       setIsApplying(false);
       setCoverLetter("");
@@ -67,6 +68,6 @@ const JobCard: React.FC<{ job: JobI }> = ({ job }) => {
       </div>
     </div>
   );
-};
+});
 
 export default JobCard;

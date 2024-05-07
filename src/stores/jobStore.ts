@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { ApiError, ApplicationI, CreateJobDataI, JobI } from "types";
 import { isErrorWithMessage } from "../utils/isErrorWithMessage";
 import {
+  createApplication,
   createJob,
   getApplications,
   getJobs,
@@ -54,6 +55,18 @@ class JobStore {
       this.myJobs.push(newJob);
     } catch (error: unknown) {
       this.handleApiError(error);
+    }
+  };
+
+  applyJob = async (jobId: string, coverLetter: string): Promise<void> => {
+    this.isApplicationsLoading = true;
+    try {
+      const application = await createApplication(jobId, coverLetter);
+      this.applications.push(application.data);
+    } catch (error: unknown) {
+      this.handleApiError(error);
+    } finally {
+      this.isApplicationsLoading = false;
     }
   };
 
