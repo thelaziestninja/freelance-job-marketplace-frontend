@@ -8,6 +8,7 @@ class UserStore {
   isProfilesLoading: boolean = false;
   profile: ProfileI | null = null;
   isProfileLoading: boolean = false;
+  profileExists: boolean = false;
   userStoreError: ApiError | null = null;
   profilePicture: string =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy4Vvlzhz_mY0fDFrSllG43WpRRoi6JUKNZg&usqp=CAU";
@@ -23,6 +24,7 @@ class UserStore {
       if (data) {
         this.profile = data;
         this.profilePicture = data.imgUrl || "";
+        this.profileExists = !!data;
       }
     } catch (error: unknown) {
       if (isErrorWithMessage(error)) {

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
 import { userStore } from "../stores/userStore";
-import { useProfile, useProfileExistence } from "../hooks/useProfiles";
+import React, { useEffect, useState } from "react";
 import ProfileFormModal from "../components/profiles/ProfileFormModal";
-import { useQueryClient } from "react-query";
 
-export const ProfilePage: React.FC = () => {
-  const { data: existenceData, isLoading: isLoadingExistence } =
-    useProfileExistence();
-  const { data: profileData, isLoading: isLoadingProfile } = useProfile();
-
+export const ProfilePage: React.FC = observer(() => {
   const [isProfileFormModalOpen, setIsProfileFormModalOpen] = useState(false);
-  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!userStore.profile) {
+      userStore.loadProfile();
+    }
+  }, []);
 
   const openProfileFormModal = () => {
     setIsProfileFormModalOpen(true);
@@ -18,20 +18,14 @@ export const ProfilePage: React.FC = () => {
 
   const closeProfileFormModal = () => {
     setIsProfileFormModalOpen(false);
-    queryClient.invalidateQueries("profileExistence");
   };
 
-  if (isLoadingExistence || isLoadingProfile) {
+  if (userStore.isProfileLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log("Profile Data:", profileData);
-  console.log("Existence Data:", existenceData);
-  console.log("Using profileData imgUrl:", profileData?.imgUrl);
-  console.log("Profile Image URL:", profileData?.imgUrl);
-  console.log("Profile Picture:", userStore.profilePicture);
-
-  const profileExists = existenceData?.exists ?? false;
+  const profileData = userStore.profile;
+  const profileExists = userStore.profileExists;
 
   return (
     <div className="h-screen bg-custom-pink flex justify-center items-center p-8">
@@ -39,7 +33,7 @@ export const ProfilePage: React.FC = () => {
       <ProfileFormModal
         isOpen={isProfileFormModalOpen}
         onClose={closeProfileFormModal}
-        profile={profileData}
+        profile={profileData || undefined}
       />
 
       {/* Main Content */}
@@ -82,4 +76,4 @@ export const ProfilePage: React.FC = () => {
       </div>
     </div>
   );
-};
+});
