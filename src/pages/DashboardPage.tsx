@@ -1,10 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import NoContent from "../components/NoContent";
-import ClientDashboard from "../components/ClientDashboard";
-
-import FreelancerDashboard from "../components/FreelancerDashboard";
 import { selectUserType } from "../features/auth/authSlice";
+import ClientDashboard from "../components/ClientDashboard";
+import FreelancerDashboard from "../components/FreelancerDashboard";
 
 const ComponentMap = {
   freelancer: FreelancerDashboard,

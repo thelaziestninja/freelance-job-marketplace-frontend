@@ -9,8 +9,8 @@ import ProfileModal from "./profiles/ProfileModal";
 import { Link, useNavigate } from "react-router-dom";
 import { selectUserType } from "../features/auth/authSlice";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
-import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
 import { useGetProfilesQuery } from "../features/profiles/profilesApiSlice";
+import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
 
 const ClientDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
