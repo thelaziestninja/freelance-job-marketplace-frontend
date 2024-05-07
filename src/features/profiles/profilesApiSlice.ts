@@ -1,13 +1,13 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { ProfileI, CteateProfileData } from "../../types";
+import { ProfileI, CteateProfileData, ProfilesI } from "../../types";
 
 export const profilesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProfiles: builder.query<ProfileI[], void>({
+    getProfiles: builder.query<ProfilesI, void>({
       query: () => "/profiles",
       providesTags: (result) =>
-        result
-          ? result.map(({ _id }) => ({ type: "Profile", _id }))
+        result?.profiles
+          ? result.profiles.map(({ _id }) => ({ type: "Profile", _id }))
           : ["Profile"],
     }),
     getProfile: builder.query<ProfileI, void>({

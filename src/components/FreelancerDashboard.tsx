@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { ProfileI } from "../types";
+import React, { useState } from "react";
 import Profile from "./profiles/Profile";
 import { useSelector } from "react-redux";
 import JobList from "./job/FreelanceJobList";
@@ -11,7 +11,7 @@ import ProfileModal from "./profiles/ProfileModal";
 import { Link, useNavigate } from "react-router-dom";
 import { selectUserType } from "../features/auth/authSlice";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
-import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
+// import { useGetReviewsQuery } from "../features/reviews/reviewsApiSliceSlice";
 
 const FreelancerDashboard: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
@@ -20,8 +20,8 @@ const FreelancerDashboard: React.FC = () => {
 
   const { data: profiles } = useGetProfilesQuery();
   const { data: profileData } = useGetProfileQuery();
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useGetReviewsQuery();
+  // const { data: reviewsData, isLoading: isLoadingReviews } =
+  //   useGetReviewsQuery();
 
   const [logout] = useLogoutMutation();
 
@@ -87,8 +87,8 @@ const FreelancerDashboard: React.FC = () => {
             Freelancers
           </h2>
           <div className="flex flex-col items-center ">
-            {profiles && Array.isArray(profiles) ? (
-              profiles.map((profile: ProfileI) => (
+            {profiles && Array.isArray(profiles.profiles) ? (
+              profiles.profiles.map((profile: ProfileI) => (
                 <div
                   key={profile._id}
                   onClick={() => handleProfileClick(profile)}
@@ -107,8 +107,8 @@ const FreelancerDashboard: React.FC = () => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviewsData || []}
-          isLoadingReviews={isLoadingReviews}
+          reviews={[]}
+          isLoadingReviews={false}
           isOpen={modalOpen}
           onClose={handleCloseModal}
         />

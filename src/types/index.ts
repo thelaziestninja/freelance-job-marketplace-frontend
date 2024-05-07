@@ -35,6 +35,10 @@ export interface ProfileI {
   imgUrl?: string;
 }
 
+export interface ProfilesI {
+  profiles: ProfileI[];
+}
+
 export interface CteateProfileData {
   skills: string[];
   name: string;

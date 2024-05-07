@@ -18,9 +18,12 @@ const ClientDashboard: React.FC = () => {
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
   const navigate = useNavigate();
 
-  const { data: profiles, refetch } = useGetProfilesQuery();
+  const { data: profiles, refetch, error } = useGetProfilesQuery();
   const { data: reviewsData, isLoading: isLoadingReviews } =
     useGetReviewsQuery();
+
+  console.log("Profiles", profiles);
+  console.log("Profiles error", error);
 
   const [logout] = useLogoutMutation();
 
@@ -93,8 +96,8 @@ const ClientDashboard: React.FC = () => {
             Freelancers
           </h2>
           <div className="flex flex-col items-center ">
-            {profiles && Array.isArray(profiles) ? (
-              profiles.map((profile: ProfileI) => (
+            {profiles && Array.isArray(profiles.profiles) ? (
+              profiles.profiles.map((profile: ProfileI) => (
                 <div
                   key={profile._id}
                   onClick={() => handleProfileClick(profile)}
