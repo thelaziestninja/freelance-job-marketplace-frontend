@@ -1,25 +1,22 @@
 import { ProfileI } from "../types";
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
 import Profile from "./profiles/Profile";
 import { observer } from "mobx-react-lite";
 import JobFormModal from "./job/JobFormModal";
-import { useNavigate } from "react-router-dom";
 import FloatingActionButton from "./UI/Button";
+import { useNavigate } from "react-router-dom";
 import ClientJobList from "./job/ClientJobList";
 import { authStore } from "../stores/authStore";
 import { userStore } from "../stores/userStore";
 import ProfileModal from "./profiles/ProfileModal";
+import React, { useEffect, useState } from "react";
 import { logout } from "../services/auth/authService";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
 
 const ClientDashboard: React.FC = observer(() => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isJobFormOpen, setIsJobFormOpen] = useState(false);
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useReviewsByFreelancer(selectedProfile?._id ?? "");
-  const reviews = reviewsData?.data ?? [];
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +25,9 @@ const ClientDashboard: React.FC = observer(() => {
     }
     if (userStore.profiles.length === 0) {
       userStore.loadProfiles();
+    }
+    if (userStore.profile?._id) {
+      userStore.loadReviews(userStore.profile._id);
     }
   }, [navigate]);
 
@@ -112,8 +112,8 @@ const ClientDashboard: React.FC = observer(() => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviews}
-          isLoadingReviews={isLoadingReviews}
+          reviews={userStore.reviews}
+          isLoadingReviews={userStore.isReviewsLoading}
           isOpen={modalOpen}
           onClose={handleCloseModal}
         />

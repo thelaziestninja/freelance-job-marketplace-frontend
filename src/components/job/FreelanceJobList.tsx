@@ -8,14 +8,14 @@ const JobList: React.FC = observer(() => {
     jobStore.loadJobs();
   }, []);
 
-  const { jobs, error, isJobsLoading } = jobStore;
+  const { jobs, jobStoreError, isJobsLoading } = jobStore;
   // console.log("Jobs:", jobs);
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Jobs you might like</h2>
       {isJobsLoading && <div>Loading jobs...</div>}
-      {error && <div>Error loading jobs: {error.message}</div>}
+      {jobStoreError && <div>Error loading jobs: {jobStoreError.message}</div>}
       {jobs.map((job) => (
         <JobCard key={job._id} job={job} />
       ))}
