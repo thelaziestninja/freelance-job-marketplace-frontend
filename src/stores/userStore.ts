@@ -3,13 +3,22 @@ import {
   createProfile,
   getProfile,
   getProfiles,
+  getReviewsByFreelancer,
   registerUser,
   updateProfile,
 } from "../services/api";
-import { ApiError, ProfileI, ProfileInput, RegisterUserDataI } from "types";
+import {
+  ApiError,
+  ProfileI,
+  ProfileInput,
+  RegisterUserDataI,
+  ReviewI,
+} from "types";
 import { isErrorWithMessage } from "../utils/isErrorWithMessage";
 
 class UserStore {
+  reviews: ReviewI[] = [];
+  isReviewsLoading: boolean = false;
   profiles: ProfileI[] = [];
   isProfilesLoading: boolean = false;
   profile: ProfileI | null = null;
@@ -22,6 +31,18 @@ class UserStore {
   constructor() {
     makeAutoObservable(this);
   }
+
+  loadReviews = async (freelancerId: string): Promise<void> => {
+    this.isReviewsLoading = true;
+    try {
+      const reviews = await getReviewsByFreelancer(freelancerId);
+      this.reviews = reviews.data;
+    } catch (error: unknown) {
+      this.handleApiError(error);
+    } finally {
+      this.isReviewsLoading = false;
+    }
+  };
 
   loadProfile = async (): Promise<void> => {
     this.isProfileLoading = true;

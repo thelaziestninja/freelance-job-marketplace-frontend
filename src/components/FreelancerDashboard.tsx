@@ -9,18 +9,12 @@ import { userStore } from "../stores/userStore";
 import ProfileModal from "./profiles/ProfileModal";
 import React, { useEffect, useState } from "react";
 import { logout } from "../services/auth/authService";
-import { useReviewsByFreelancer } from "../hooks/useReviews";
 
 const FreelancerDashboard: React.FC = observer(() => {
   const [selectedProfile, setSelectedProfile] = useState<ProfileI | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  const { data: reviewsData, isLoading: isLoadingReviews } =
-    useReviewsByFreelancer(userStore.profile?._id ?? "");
-  const reviews = reviewsData?.data ?? [];
-  const { profiles } = userStore;
 
   useEffect(() => {
     if (authStore.userType === "client") {
@@ -29,8 +23,11 @@ const FreelancerDashboard: React.FC = observer(() => {
     if (userStore.profiles.length === 0) {
       userStore.loadProfiles();
     }
+    if (userStore.profile?._id) {
+      userStore.loadReviews(userStore.profile._id);
+    }
     userStore.loadProfile();
-  }, [navigate, profiles]);
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {
@@ -89,8 +86,8 @@ const FreelancerDashboard: React.FC = observer(() => {
             Freelancers
           </h2>
           <div className="flex flex-col items-center ">
-            {profiles && Array.isArray(profiles) ? (
-              profiles.map((profile: ProfileI) => (
+            {userStore.profiles && Array.isArray(userStore.profiles) ? (
+              userStore.profiles.map((profile: ProfileI) => (
                 <div
                   key={profile._id}
                   onClick={() => handleProfileClick(profile)}
@@ -109,8 +106,8 @@ const FreelancerDashboard: React.FC = observer(() => {
       {selectedProfile && (
         <ProfileModal
           profile={selectedProfile}
-          reviews={reviews}
-          isLoadingReviews={isLoadingReviews}
+          reviews={userStore.reviews}
+          isLoadingReviews={userStore.isReviewsLoading}
           isOpen={modalOpen}
           onClose={handleCloseModal}
         />

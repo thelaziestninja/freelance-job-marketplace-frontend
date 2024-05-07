@@ -21,7 +21,6 @@ const ClientDashboard: React.FC = observer(() => {
     useReviewsByFreelancer(selectedProfile?._id ?? "");
   const reviews = reviewsData?.data ?? [];
   const navigate = useNavigate();
-  const { profiles } = userStore;
 
   useEffect(() => {
     if (authStore.userType === "freelancer") {
@@ -93,8 +92,8 @@ const ClientDashboard: React.FC = observer(() => {
             Freelancers
           </h2>
           <div className="flex flex-col items-center ">
-            {profiles && Array.isArray(profiles) ? (
-              profiles.map((profile: ProfileI) => (
+            {userStore.profiles && Array.isArray(userStore.profiles) ? (
+              userStore.profiles.map((profile: ProfileI) => (
                 <div
                   key={profile._id}
                   onClick={() => handleProfileClick(profile)}
