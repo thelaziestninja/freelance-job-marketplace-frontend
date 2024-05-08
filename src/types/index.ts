@@ -57,6 +57,10 @@ export interface JobI {
   deadline: Date;
 }
 
+export interface JobsI {
+  jobs: JobI[];
+}
+
 export interface JobsResponse {
   jobs: JobI[];
 }

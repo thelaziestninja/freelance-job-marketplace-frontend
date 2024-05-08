@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { JobI, CreateJobDataI, JobsResponse } from "../../types";
+import { JobI, JobsI, CreateJobDataI, JobsResponse } from "../../types";
 
 export const jobsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +13,7 @@ export const jobsApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "Job", id: "LIST" }],
     }),
-    getMyJobs: builder.query<JobI[], void>({
+    getMyJobs: builder.query<JobsI, void>({
       query: () => "/my-jobs",
     }),
     createJob: builder.mutation<JobI, CreateJobDataI>({

@@ -19,12 +19,6 @@ export const ApplicationPage: React.FC = () => {
   } = useGetMyJobsQuery();
 
   const {
-    data: applications,
-    isLoading: isLoadingApplications,
-    isError: isErrorApplications,
-  } = useGetApplicationsQuery();
-
-  const {
     data: profilesData,
     isLoading: isLoadingProfiles,
     isError: isProfilesError,
@@ -39,6 +33,20 @@ export const ApplicationPage: React.FC = () => {
       navigate("/login");
     }
   }, [userType, navigate]);
+
+  // Determine the job_id, ensuring it's not undefined before proceeding
+  const job_id = myJobsData?.jobs?.[0]?._id;
+
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications,
+  } = useGetApplicationsQuery(
+    { job_id },
+    {
+      skip: !job_id, // Skip the query if job_id is undefined
+    }
+  );
 
   if (isLoadingJobs || isLoadingProfiles || isLoadingApplications) {
     return <div>Loading...</div>;
